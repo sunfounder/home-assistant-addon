@@ -1,0 +1,13 @@
+name: "Hello world"
+version: "1.1.0"
+slug: folder
+description: >-
+  "Long description"
+arch:
+  - armhf
+url: "website with more information about the add-on (e.g., a forum thread for support)" # TODO
+startup: application
+devices:
+  - /dev/i2c-1
+  - /dev/spi
+gpio: true
