@@ -1,8 +1,34 @@
-ARG BUILD_FROM
-FROM $BUILD_FROM
+FROM ghcr.io/hassio-addons/ubuntu-base/aarch64:8.2.1
 
-# Copy data for add-on
-COPY run.sh /
-RUN chmod a+x /run.sh
+# update apt-get
+RUN apt-get update
 
-CMD [ "/run.sh" ]
+# install dependencies
+RUN apt-get install git python3 python3-pip python3-setuptools sudo -y
+
+# mount config.txt to /boot/firmware
+RUN if [ -e /dev/sda1 ]; then \
+  mkdir /boot; \
+  mkdir /boot/firmware; \
+  mount /dev/sda1 /boot/firmware; \
+  ls /boot/firmware; \
+else \
+  echo "No /dev/sda1"; \
+fi
+
+# set the working directory to /data/pironman
+WORKDIR /data
+
+# copy run.sh
+COPY run.sh /data
+
+# add execute permission
+RUN chmod a+x /data/run.sh
+
+# clone pironman
+RUN cd /data && git clone -b v2.0 --depth 1 https://github.com/sunfounder/pironman.git
+
+# install pironman
+RUN cd /data/pironman && python3 install.py --skip-config-txt --skip-auto-startup --skip-reboot
+
+CMD [ "/data/run.sh" ]
