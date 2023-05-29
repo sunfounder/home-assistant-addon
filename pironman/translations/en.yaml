@@ -1,0 +1,44 @@
+configuration:
+  temperature_unit:
+    name: Temperature unit
+    description: Temperature unit
+    options:
+      - Celsius
+      - Fahrenheit
+  fan_temp:
+    name: Fan temperature
+    description: The temperature at which the fan will start
+  display_always_on:
+    name: Display always on
+    description: Whether keeping the display always on
+  display_on_for:
+    name: Display on for
+    description: How long the display will be on, in seconds
+  rgb_on:
+    name: RGB on
+    description: Whether turning on the RGB
+  rgb_style:
+    name: RGB style
+    description: RGB style
+    options:
+      - Breath
+      - Leap
+      - Flow
+      - Raise up
+      - Colorful
+  rgb_color:
+    name: RGB color
+    description: RGB color
+  rgb_speed:
+    name: RGB speed
+    description: RGB speed
+  rgb_freq:
+    name: RGB frequency
+    description: RGB frequency
+  rgb-pin:
+    name: RGB pin
+    description: RGB pin
+    options:
+      - 10
+      - 12
+      - 21
