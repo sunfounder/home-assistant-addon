@@ -16,14 +16,14 @@ else \
   echo "No /dev/sda1"; \
 fi
 
+# set the working directory to /data/pironman
+WORKDIR /data
+
 # clone pironman
 RUN cd /data && git clone -b v2.0 --depth 1 https://github.com/sunfounder/pironman.git
 
 # install pironman
 RUN cd /data/pironman && python3 install.py --skip-config-txt --skip-auto-startup --skip-reboot
-
-# set the working directory to /data/pironman
-WORKDIR /data
 
 # copy run.sh
 COPY run.sh /data
