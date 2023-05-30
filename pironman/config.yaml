@@ -1,6 +1,6 @@
 name: "Pironman"
 description: "Pironman support"
-version: "1.0.0.23"
+version: "1.0.0.24"
 slug: "pironman"
 init: false
 arch:
@@ -25,7 +25,7 @@ options:
   rgb_color: "0a1aff"
   rgb_speed: 50
   rgb_freq: 1000
-  rgb-pin: "10"
+  rgb_pin: "10"
 schema:
   temperature_unit: "list(C|F)"
   fan_temp: int # (30, 80)
@@ -36,4 +36,4 @@ schema:
   rgb_color: str
   rgb_speed: int # (0, 100)
   rgb_freq: int # (400, 1600)
-  rgb-pin: "list(10|12|21)"
+  rgb_pin: "list(10|12|21)"
