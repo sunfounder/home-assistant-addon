@@ -26,9 +26,10 @@ RUN cd /data && git clone -b v2.0 --depth 1 https://github.com/sunfounder/pironm
 RUN cd /data/pironman && python3 install.py --skip-config-txt --skip-auto-startup --skip-reboot
 
 # copy run.sh
-COPY run.sh /data
+COPY run.sh /
 
 # add execute permission
-RUN chmod a+x /data/run.sh
+RUN chmod a+x /run.sh
 
-CMD [ "ls /data ;; ls / ;; echo $HASSIO_HOST ;;/data/run.sh" ]
+# CMD [ "ls /data ;; ls / ;; echo $HASSIO_HOST ;;/data/run.sh" ]
+CMD [ "/run.sh" ]
