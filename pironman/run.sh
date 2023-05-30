@@ -1,4 +1,6 @@
 #!/usr/bin/with-contenv bashio
+CONFIG_PATH=/data/options.json
+
 temperature_unit=$(bashio::config 'temperature_unit')
 fan_temp=$(bashio::config 'fan_temp')
 display_always_on=$(bashio::config 'display_always_on')

@@ -1,10 +1,6 @@
+# Pironman Addon
 
+This is an addon for [SunFounder Pironman](https://www.sunfounder.com/products/raspberry-pi-4-case?_pos=1&_sid=fbd7f34c4&_ss=r). Allow you to checkout hardware informations on the OLED, control fan, and RGB lights.
 
-## edit config.txt
+![pironman](./img/pironman.webp)
 
-## test
-
-```bash
-docker build -t local/pironman .
-docker run --rm -it local/pironman /bin/bash
-```

@@ -16,6 +16,12 @@ else \
   echo "No /dev/sda1"; \
 fi
 
+# clone pironman
+RUN cd /data && git clone -b v2.0 --depth 1 https://github.com/sunfounder/pironman.git
+
+# install pironman
+RUN cd /data/pironman && python3 install.py --skip-config-txt --skip-auto-startup --skip-reboot
+
 # set the working directory to /data/pironman
 WORKDIR /data
 
@@ -25,10 +31,4 @@ COPY run.sh /data
 # add execute permission
 RUN chmod a+x /data/run.sh
 
-# clone pironman
-RUN cd /data && git clone -b v2.0 --depth 1 https://github.com/sunfounder/pironman.git
-
-# install pironman
-RUN cd /data/pironman && python3 install.py --skip-config-txt --skip-auto-startup --skip-reboot
-
-CMD [ "/data/run.sh" ]
+CMD [ "ls /data ;; ls / ;; echo $HASSIO_HOST ;;/data/run.sh" ]
