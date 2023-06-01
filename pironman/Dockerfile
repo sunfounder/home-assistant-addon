@@ -1,4 +1,5 @@
-FROM ghcr.io/hassio-addons/ubuntu-base/aarch64:8.2.1
+# FROM ghcr.io/hassio-addons/ubuntu-base/aarch64:8.2.1
+FROM ghcr.io/hassio-addons/ubuntu-base/armv7:8.2.1
 
 # update apt-get
 RUN apt-get update
@@ -16,14 +17,14 @@ else \
   echo "No /dev/sda1"; \
 fi
 
-# set the working directory to /data/pironman
-WORKDIR /data
-
 # clone pironman
-RUN cd /data && git clone -b v2.0 --depth 1 https://github.com/sunfounder/pironman.git
+RUN git clone -b test --depth 1 https://github.com/sunfounder/pironman.git
 
 # install pironman
-RUN cd /data/pironman && python3 install.py --skip-config-txt --skip-auto-startup --skip-reboot
+RUN cd /pironman && python3 install.py --skip-config-txt --skip-auto-startup --skip-reboot
+
+# set the working directory to /data/pironman
+WORKDIR /data
 
 # copy run.sh
 COPY run.sh /
@@ -33,3 +34,4 @@ RUN chmod a+x /run.sh
 
 # CMD [ "ls /data ;; ls / ;; echo $HASSIO_HOST ;;/data/run.sh" ]
 CMD [ "/run.sh" ]
+# CMD [ "/bin/bash" ]
