@@ -30,9 +30,6 @@ profile pironman flags=(attach_disconnected,mediate_deleted) {
   # Start new profile for service
   /usr/local/bin/pironman cx -> pironman,
 
-  # Sudo
-  /usr/bin/sudo ix,
-
   profile pironman flags=(attach_disconnected,mediate_deleted) {
     #include <abstractions/base>
 
@@ -57,13 +54,20 @@ profile pironman flags=(attach_disconnected,mediate_deleted) {
 
     # Access GPIO
     /sys/class/gpio/** rw,
-    /dev/mem rw,
+    /dev/gpiomem rwk,
+    /dev/mem rwk,
 
     # Access SPI
     /dev/spidev* rw,
 
     # Access CPU info
     /proc/cpuinfo r,
+
+    # Access pironman library
+    /opt/pironman/** rwix,
+
+    # Access mailbox for ws2812
+    /dev/vcio rwk,
 
   }
 }

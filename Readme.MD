@@ -1,5 +1,22 @@
 # SunFounder Addon for Home assistant
 
 
-## Test pironman
-docker run --rm -it --security-opt apparmor=apparmor.txt --privileged local/aarch64-addon-pironman:1.0.0.30 /bin/bash
+## Login the running addon container for debgging
+
+Find the container name
+```
+docker ps
+```
+
+replace the `<container_name>` in the following command
+```
+docker exec -it <container_name> /bin/bash
+```
+
+## Home Assistant Supervisor log
+
+See supervisor log for appon reflash and install errors
+
+```
+docker logs hassio_supervisor -f
+```

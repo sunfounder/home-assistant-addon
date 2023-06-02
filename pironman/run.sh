@@ -27,7 +27,7 @@ echo "display_on_for: $display_on_for"
 # echo "rgb_freq: $rgb_freq"
 # echo "rgb_pin: $rgb_pin"
 
-# sudo /usr/local/bin/pironman start -F \
+# bash /usr/local/bin/pironman start -F \
 #     -u $temperature_unit \
 #     -f $fan_temp \
 #     -al $display_always_on \

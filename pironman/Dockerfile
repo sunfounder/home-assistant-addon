@@ -5,7 +5,7 @@ FROM ghcr.io/hassio-addons/ubuntu-base/armv7:8.2.1
 RUN apt-get update
 
 # install dependencies
-RUN apt-get install git python3 python3-pip python3-setuptools sudo -y
+RUN apt-get install git python3 python3-pip python3-setuptools -y
 
 # mount config.txt to /boot/firmware
 RUN if [ -e /dev/sda1 ]; then \
@@ -32,6 +32,8 @@ COPY run.sh /
 # add execute permission
 RUN chmod a+x /run.sh
 
+
+RUN apt-get install nano -y
 # CMD [ "ls /data ;; ls / ;; echo $HASSIO_HOST ;;/data/run.sh" ]
 CMD [ "/run.sh" ]
 # CMD [ "/bin/bash" ]
