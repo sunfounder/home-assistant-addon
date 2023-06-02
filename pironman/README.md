@@ -1,6 +1,9 @@
 # Pironman Addon
 
-> Currently in Beta, need full access to access GPIO pins. RGB not working.
+> Currently Pironman Addon is in Beta with following knowing issue:
+>   1. RGB not working.
+>   2. Long press power button to soft power off the pi is not working
+
 
 This is an addon for [SunFounder Pironman](https://www.sunfounder.com/products/raspberry-pi-4-case?_pos=1&_sid=fbd7f34c4&_ss=r). Allow you to checkout hardware informations on the OLED, control fan, and RGB lights.
 
