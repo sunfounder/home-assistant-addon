@@ -27,22 +27,15 @@ echo "display_on_for: $display_on_for"
 # echo "rgb_freq: $rgb_freq"
 # echo "rgb_pin: $rgb_pin"
 
-# bash /usr/local/bin/pironman start -F \
-#     -u $temperature_unit \
-#     -f $fan_temp \
-#     -al $display_always_on \
-#     -s $display_on_for \
-#     -re false
+bash /usr/local/bin/pironman start -F \
+    -u $temperature_unit \
+    -f $fan_temp \
+    -al $display_always_on \
+    -s $display_on_for \
+    -re false
     # -rw $rgb_on \
     # -rs $rgb_style \
     # -rc $rgb_color \
     # -rb $rgb_speed \
     # -pwm $rgb_freq \
     # -rp $rgb_pin
-
-i=0
-while true; do
-    echo $i
-    i=$((i+1))
-    sleep 5
-done
