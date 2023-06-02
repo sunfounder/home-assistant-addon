@@ -25,7 +25,6 @@ docker logs hassio_supervisor -f
 
 > Currently Pironman Addon is in Beta with following knowing issue:
 >   1. RGB not working.
->   2. Long press power button to soft power off the pi is not working
 
 ### Tutorial
 
