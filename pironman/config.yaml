@@ -1,6 +1,6 @@
 name: "Pironman"
 description: "Pironman support"
-version: "0.0.8"
+version: "0.0.9"
 slug: "pironman"
 init: false
 arch:
@@ -13,7 +13,7 @@ devices:
   - /dev/sda1
 gpio: true
 devicetree: true
-# full_access: true
+full_access: true
 host_network: true
 options:
   temperature_unit: "C"
