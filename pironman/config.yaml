@@ -1,6 +1,6 @@
 name: "Pironman"
 description: "Pironman support"
-version: "0.0.10"
+version: "0.0.11"
 slug: "pironman"
 init: false
 arch:
@@ -15,6 +15,8 @@ gpio: true
 devicetree: true
 full_access: true
 host_network: true
+hassio_api: true
+hassio_role: "admin"
 options:
   temperature_unit: "C"
   fan_temp: 50
