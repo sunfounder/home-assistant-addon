@@ -1,7 +1,15 @@
 # Changelog
 
-## [0.0.12] - 2023-06-02
+## [0.0.13] - todo
 
 ### Fixed
 
 - fix soft poweroff
+
+### Changed
+
+- change base image to raspbian
+
+### Add
+
+- AppArmor

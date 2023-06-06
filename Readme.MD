@@ -1,32 +1,39 @@
 # SunFounder Addon for Home assistant
 
-
-## Login the running addon container for debgging
-
-Find the container name
-```
-docker ps
-```
-
-replace the `<container_name>` in the following command
-```
-docker exec -it <container_name> /bin/bash
-```
-
-## Home Assistant Supervisor log
-
-See supervisor log for appon reflash and install errors
-
-```
-docker logs hassio_supervisor -f
-```
-
 ## Pironman Addon
 
 > Currently Pironman Addon is in Beta with following knowing issue:
 >   1. RGB not working.
 
 ### Tutorial
+
+#### Setup config.txt
+
+You need to setup config.txt to enable I2C and SPI for Pironman.
+
+> This only works for Home Assistant OS, running on Raspberry Pi. Not for Home Assistant Container.
+
+You will need:
+
+ - SD card reader
+ - SD card with Home Assistant Operating System flashed on it
+
+Shutdown/turn-off your Home Assistant installation and unplug the SD card. Plug the SD card into an SD card reader and find a drive/file system named `hassos-boot`. The file system might be shown/mounted automatically. If not, use your operating systems disk management utility to find the SD card reader and make sure the first partition is available.
+
+ - In the root of the `hassos-boot` partition, **add a new folder called** `CONFIG`.
+ - In the `CONFIG` folder, **add another new folder called** `modules`.
+ - Inside the `modules` folder, **add a text file called** `rpi-i2c.conf` with the following content:
+    ```
+    i2c-dev
+    ```
+ - In the root of the `hassos-boot` partition, **edit the file called** `config.txt` **add four lines** to the bottom:
+    ```
+    dtparam=i2c_vc=on
+    dtparam=i2c_arm=on
+    dtoverlay=gpio-poweroff,gpio_pin=26,active_low=0
+    dtoverlay=gpio-ir,gpio_pin=13
+    ```
+ - Eject the SD card and plug it back into your Raspberry Pi and boot it up.
 
 #### Install the Addon
 
@@ -55,3 +62,46 @@ Change to the Log tab, and see if there's any error. If not, you can continue to
 #### Configure
 
 You can change the configuration in the Configuration tab. Navigate to Configuration tab, and change the settings.
+
+
+
+## Development
+
+Development instruction for addon developer.
+
+### Cleanup image cache
+
+Image may not be updated after rebuild. To force rebuild, you need to clean up the image cache.
+uninstall the addon first, then run the following command to clean up the image cache.
+
+```
+docker image prune -af
+```
+
+### Login the running addon container for debgging
+
+Find the container name
+```
+docker ps
+```
+
+replace the `<container_name>` in the following command
+```
+docker exec -it <container_name> /bin/bash
+```
+
+### Home Assistant Supervisor log
+
+See supervisor log for appon reflash and install errors
+
+```
+docker logs hassio_supervisor -f
+```
+
+### App Armor
+
+Check if complain enabled
+
+```
+docker inspect addon_local_pironman | grep "AppArmorProfile"
+```

@@ -1,6 +1,6 @@
 name: "Pironman"
 description: "Pironman support"
-version: "0.0.12"
+version: "0.0.12.9"
 slug: "pironman"
 init: false
 arch:
@@ -11,12 +11,14 @@ devices:
   - /dev/i2c-1
   - /dev/spidev0.0
   - /dev/sda1
+  - /dev/mem
 gpio: true
 devicetree: true
 full_access: true
-host_network: true
+# host_network: true
 hassio_api: true
-hassio_role: "admin"
+hassio_role: "homeassistant"
+journald: true
 options:
   temperature_unit: "C"
   fan_temp: 50
