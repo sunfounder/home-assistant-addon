@@ -48,4 +48,4 @@ Shutdown/turn-off your Home Assistant installation and unplug the SD card. Plug 
     # dtoverlay=hifiberry-dac
     # dtoverlay=i2s-mmap
     ```
- - Eject the SD card and plug it back into your Raspberry Pi and boot it up.
+- Eject the SD card and plug it back into your Raspberry Pi and boot it up.
