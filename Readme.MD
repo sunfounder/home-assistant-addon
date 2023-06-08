@@ -1,5 +1,21 @@
 # SunFounder Addon for Home assistant
 
+- [SunFounder Addon for Home assistant](#sunfounder-addon-for-home-assistant)
+  - [Pironman Addon](#pironman-addon)
+    - [Tutorial](#tutorial)
+      - [Setup config.txt](#setup-configtxt)
+      - [Install the Addon](#install-the-addon)
+        - [Click the button below to install the addon](#click-the-button-below-to-install-the-addon)
+        - [Or install it manually:](#or-install-it-manually)
+      - [Setup](#setup)
+      - [Configure](#configure)
+  - [Development](#development)
+    - [Cleanup image cache](#cleanup-image-cache)
+    - [Login the running addon container for debgging](#login-the-running-addon-container-for-debgging)
+    - [Home Assistant Supervisor log](#home-assistant-supervisor-log)
+    - [App Armor](#app-armor)
+
+
 ## Pironman Addon
 
 > Currently Pironman Addon is in Beta with following knowing issue:
