@@ -1,6 +1,6 @@
 name: "Pironman"
 description: "Pironman support"
-version: "0.0.12.11"
+version: "0.0.12.19"
 slug: "pironman"
 init: false
 arch:
@@ -14,32 +14,31 @@ devices:
 gpio: true
 devicetree: true
 full_access: true
-# host_network: true
+privileged:
+  - SYS_RAWIO
+  - SYS_RESOURCE
 hassio_api: true
-hassio_role: "homeassistant"
+hassio_role: "manager"
 journald: true
 options:
   temperature_unit: "C"
   fan_temp: 50
   display_always_on: false
   display_on_for: 30
-  # rgb_on: true
-  # rgb_style: "breath"
-  # rgb_color: "0a1aff"
-  # rgb_speed: 50
-  # rgb_freq: 1000
-  # rgb_pin: "10"
+  rgb_on: true
+  rgb_style: "breath"
+  rgb_color: "0a1aff"
+  rgb_speed: 50
+  rgb_freq: 1000
+  rgb_pin: "10"
 schema:
   temperature_unit: "list(C|F)"
   fan_temp: int # (30, 80)
   display_always_on: bool
   display_on_for: int
-  # rgb_on: bool
-  # rgb_style: "list(breath|leap|flow|raise_up|colorful)"
-  # rgb_color: str
-  # rgb_speed: int # (0, 100)
-  # rgb_freq: int # (400, 1600)
-  # rgb_pin: "list(10|12|21)"
-
-# ports:
-#   8000/tcp: 8000
+  rgb_on: bool
+  rgb_style: "list(breath|leap|flow|raise_up|colorful)"
+  rgb_color: str
+  rgb_speed: int # (0, 100)
+  rgb_freq: int # (400, 1600)
+  rgb_pin: "list(10|12|21)"

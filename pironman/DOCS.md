@@ -16,42 +16,31 @@ Shutdown/turn-off your Home Assistant installation and unplug the SD card. Plug 
  - In the root of the `hassos-boot` partition, **add a new folder called** `CONFIG`.
  - In the `CONFIG` folder, **add another new folder called** `modules`.
  - Inside the `modules` folder, **add a text file called** `rpi-i2c.conf` with the following content:
-    ```
-    i2c-dev
-    ```
- - In the root of the `hassos-boot` partition, **edit the file called** `config.txt` **add six lines** to it:
-    ```
-    dtparam=i2c_vc=on
-    dtparam=i2c_arm=on
-    dtoverlay=gpio-poweroff,gpio_pin=26,active_low=0
-    dtoverlay=gpio-ir,gpio_pin=13
-    # For RGB
-    dtparam=spi=on
-    dtparam=audio
-    ```
+   ```
+   i2c-dev
+   ```
+ - In the root of the `hassos-boot` partition, **edit the file called** `config.txt` **add four lines** to it:
+   ```
+   dtparam=i2c_vc=on
+   dtparam=i2c_arm=on
+   dtoverlay=gpio-poweroff,gpio_pin=26,active_low=0
+   dtoverlay=gpio-ir,gpio_pin=13
+   ```
+ - To enable RGB, selected one driver and make sure you set up the main board respectivly. Add more lines to the `config.txt` file:
+   - For SPI(GPIO10)
+      ```
+      dtparam=spi=on
+      dtparam=audio=on
+      core_freq=500
+      core_freq_min=500
+      ```
+   - For PCM(GPIO21)
+      ```
+      dtparam=audio=on
+      dtoverlay=hifiberry-dac
+      ```
+   - For PWM(GPIO12)
+      ```
+      dtparam=audio=off
+      ```
  - Eject the SD card and plug it back into your Raspberry Pi and boot it up.
-
-## Change RGB Pin
-
-WS2812 RGB have 3 different driver options, SPI(GPIO10), PCM(GPIO21) and PWM(GPIO12). If you need to change different driver, you need to change the pin number in config and change the corespoding driver in the config.txt. Default for Pironman 1.0 is PWM(GPIO12), for Pironman 1.1 is SPI(GPIO10). (Pironman 1.0 have only one options, PWM(GPIO12). Pironman 1.1 have three options, SPI(GPIO10), PCM(GPIO21) and PWM(GPIO12).)
-
-First, go to addon configuration page, change the RGB Pin to the pin you want to use. SPI(GPIO10), PCM(GPIO21) or PWM(GPIO12). Click save.
-
-Then, like above, turn off Pironman, unplug the SD card, plug it into your computer, find the `hassos-boot` partition, edit the `config.txt` file.
-
-- SPI(GPIO10)
-   ```
-   dtparam=spi=on
-   dtparam=audio=on
-   core_freq=500
-   core_freq_min=500
-   ```
-- PCM(GPIO21)
-   ```
-   dtparam=audio=on
-   dtoverlay=hifiberry-dac
-   ```
-- PWM(GPIO12)
-   ```
-   dtparam=audio=off
-   ```

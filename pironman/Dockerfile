@@ -16,14 +16,13 @@ RUN cd /pironman && python3 install.py --skip-config-txt --skip-auto-startup --s
 # set the working directory to /data/pironman
 WORKDIR /data
 
-# # copy run.sh
-# COPY run.sh /
-# # add execute permission
-# RUN chmod a+x /run.sh
-# CMD [ "/run.sh" ]
+# copy run.sh
+COPY run.sh /
+# add execute permission
+RUN chmod a+x /run.sh
+CMD [ "/run.sh" ]
 
-RUN apt-get install systemd apparmor-utils -y
 
-COPY test.sh /
-RUN chmod a+x /test.sh
-CMD [ "/test.sh" ]
+# COPY test.sh /
+# RUN chmod a+x /test.sh
+# CMD [ "/test.sh" ]
