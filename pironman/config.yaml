@@ -1,6 +1,6 @@
 name: "Pironman"
 description: "Pironman support"
-version: "0.0.12.19"
+version: "1.0.0"
 slug: "pironman"
 init: false
 arch:
