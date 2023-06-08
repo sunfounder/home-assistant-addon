@@ -5,7 +5,7 @@ FROM $BUILD_FROM
 RUN apt-get update
 
 # install dependencies
-RUN apt-get install git python3 python3-pip python3-setuptools -y
+RUN apt-get install git python3 python3-pip python3-setuptools procps -y
 
 # clone pironman
 RUN git clone -b test --depth 1 https://github.com/sunfounder/pironman.git

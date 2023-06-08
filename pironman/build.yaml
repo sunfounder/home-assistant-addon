@@ -1,8 +1,6 @@
 build_from:
   # aarch64: ghcr.io/hassio-addons/ubuntu-base/aarch64:8.2.1
-  # armhf: ghcr.io/hassio-addons/ubuntu-base/armv7:8.2.1
-  aarch64: ghcr.io/home-assistant/armhf-base-raspbian:bullseye
-  armhf: ghcr.io/home-assistant/armhf-base-raspbian:bullseye
-squash: false
-args:
-  my_build_arg: xy
+  aarch64: ghcr.io/hassio-addons/ubuntu-base/armv7:8.2.1
+  armhf: ghcr.io/hassio-addons/ubuntu-base/armv7:8.2.1
+  # aarch64: ghcr.io/home-assistant/armhf-base-raspbian:bullseye
+  # armhf: ghcr.io/home-assistant/armhf-base-raspbian:bullseye

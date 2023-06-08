@@ -1,6 +1,6 @@
 name: "Pironman"
 description: "Pironman support"
-version: "0.0.12.9"
+version: "0.0.12.11"
 slug: "pironman"
 init: false
 arch:
@@ -10,7 +10,6 @@ startup: application
 devices:
   - /dev/i2c-1
   - /dev/spidev0.0
-  - /dev/sda1
   - /dev/mem
 gpio: true
 devicetree: true

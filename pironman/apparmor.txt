@@ -30,6 +30,10 @@ profile pironman flags=(attach_disconnected,mediate_deleted,complain) {
   # Start new profile for service
   /usr/local/bin/pironman cx -> pironman,
 
+  /etc/nsswitch.conf r,
+  /usr/bin/who ix,
+  /usr/bin/mawk ix,
+
   # Access to gpio
   /sys/class/gpio/** rw,
   /dev/mem rw,
