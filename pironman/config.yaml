@@ -1,6 +1,6 @@
 name: "Pironman"
 description: "Pironman support"
-version: "1.0.0"
+version: "1.0.1"
 slug: "pironman"
 init: false
 arch:
@@ -13,6 +13,7 @@ devices:
   - /dev/mem
 gpio: true
 devicetree: true
+host_network: true
 full_access: true
 privileged:
   - SYS_RAWIO
