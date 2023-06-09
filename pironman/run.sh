@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv bashio
+#!/usr/bin/with-contenv /usr/bin/bashio
 CONFIG_PATH=/data/options.json
 
 temperature_unit=$(bashio::config 'temperature_unit')
@@ -11,9 +11,6 @@ rgb_color=$(bashio::config 'rgb_color')
 rgb_speed=$(bashio::config 'rgb_speed')
 rgb_freq=$(bashio::config 'rgb_freq')
 rgb_pin=$(bashio::config 'rgb_pin')
-
-CONF="/root/.config/pironman/config.txt"
-
 
 echo "Starting pironman with the following parameters:"
 echo "temperature_unit: $temperature_unit"
