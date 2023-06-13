@@ -18,9 +18,6 @@
 
 ## Pironman Addon
 
-> Currently Pironman Addon is in Beta with following knowing issue:
->   1. RGB not working.
-
 ### Tutorial
 
 #### Setup config.txt
