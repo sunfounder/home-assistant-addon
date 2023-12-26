@@ -1,0 +1,41 @@
+name: "Pironman 5"
+description: "Pironman 5 support"
+version: "0.0.1"
+slug: "pironman5"
+init: false
+arch:
+  - aarch64
+  - armhf
+startup: application
+devices:
+  - /dev/i2c-1
+  - /dev/spidev0.0
+  - /dev/mem
+gpio: true
+devicetree: true
+host_network: true
+full_access: true
+privileged:
+  - SYS_RAWIO
+  - SYS_RESOURCE
+hassio_api: true
+hassio_role: "manager"
+journald: true
+options:
+  unit: "C"
+  rgb_enable: true
+  rgb_style: "breath"
+  rgb_color: "0a1aff"
+  rgb_num: 4
+  rgb_speed: 50
+  rgb_freq: 1000
+  rgb_pin: "10"
+schema:
+  unit: "list(C|F)"
+  rgb_enable: bool
+  rgb_style: "list(breath|leap|flow|raise_up|colorful)"
+  rgb_color: str
+  rgb_num: int
+  rgb_speed: int # (0, 100)
+  rgb_freq: int # (400, 1600)
+  rgb_pin: "list(10|12|21|spi|SPI|pwm|PWM|pcm|PCM)"
