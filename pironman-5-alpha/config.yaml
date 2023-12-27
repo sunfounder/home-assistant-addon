@@ -1,5 +1,5 @@
-name: "Pironman 5"
-description: "Pironman 5 support"
+name: "Pironman 5 alpha"
+description: "Pironman 5 support alpha"
 version: "0.0.1"
 slug: "pironman5"
 init: false

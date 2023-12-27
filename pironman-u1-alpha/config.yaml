@@ -1,0 +1,43 @@
+name: "Pironman U1 Alpha"
+description: "Pironman U1 Support"
+version: "0.0.1"
+slug: "pironman-u1-alpha"
+init: false
+arch:
+  - aarch64
+  - armhf
+startup: application
+gpio: true
+devicetree: true
+host_network: true
+full_access: true
+privileged:
+  - SYS_RAWIO
+  - SYS_RESOURCE
+hassio_api: true
+hassio_role: "manager"
+journald: true
+options:
+  mqtt_host: "core-mosquitto"
+  mqtt_port: 1883
+  mqtt_username: "mqtt"
+  mqtt_password: "mqtt"
+  ssl: false
+  ssl_cafile: ""
+  ssl_certfile: ""
+schema:
+  mqtt_host: str
+  mqtt_port: int
+  mqtt_username: str
+  mqtt_password: str
+  ssl: bool
+  ssl_cafile: str
+  ssl_certfile: str
+webui: "http://[HOST]:[PORT:34001]/dashboard"
+ports: 
+  34001/tcp: 34001
+ports_description:
+  34001/tcp: Web UI
+ingress: true
+ingress_entry: "/dashboard"
+

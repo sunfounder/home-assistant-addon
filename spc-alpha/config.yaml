@@ -1,5 +1,5 @@
-name: "SunFounder Power Control"
-description: "SunFounder Power Control"
+name: "SunFounder Power Control Alpha"
+description: "SunFounder Power Control for Pironman U1 and Pironman 4"
 version: "0.0.1"
 slug: "spc"
 init: false
