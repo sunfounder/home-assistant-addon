@@ -1,0 +1,29 @@
+name: "Pironman U1 Alpha"
+description: "Pironman U1 Support"
+version: "0.0.8"
+slug: "pironman-u1-alpha"
+init: false
+arch:
+  - aarch64
+  - armhf
+startup: application
+# full_access: true
+gpio: true
+devices:
+  - /dev/i2c-1
+privileged:
+  - SYS_RAWIO
+  - SYS_RESOURCE
+hassio_api: true
+hassio_role: "manager"
+# host_network: true
+webui: "http://[HOST]:[PORT:34001]/dashboard"
+ports: 
+  34001/tcp: 34001
+ports_description:
+  34001/tcp: Web UI
+panel_icon: mdi:view-dashboard
+ingress: true
+ingress_port: 34001
+ingress_entry: "dashboard"
+
