@@ -1,7 +1,7 @@
 # Changelog
 
-## [1.0.7] - 2023-8-8
+## [1.0.8] - 2024-1-10
 
 ### Fixed
-- update to pironman v2.0 branch
+- Fixed for new OS
 
