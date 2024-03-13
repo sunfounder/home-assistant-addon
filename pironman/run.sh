@@ -29,8 +29,7 @@ bash /usr/local/bin/pironman start -F \
     -f $fan_temp \
     -al $display_always_on \
     -s $display_on_for \
-    -re true \
-    -rw $rgb_on \
+    -re $rgb_on \
     -rs $rgb_style \
     -rc $rgb_color \
     -rb $rgb_speed \

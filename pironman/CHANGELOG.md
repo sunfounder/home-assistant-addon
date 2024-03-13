@@ -1,7 +1,8 @@
 # Changelog
 
-## [1.0.9] - 2024-1-12
+## [1.0.11] - 2024-3-13
 
 ### Fixed
-- Fixed for new OS
+- Fixed Invalid argument -rw
+
 
