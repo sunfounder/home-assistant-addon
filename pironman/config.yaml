@@ -1,26 +1,20 @@
 name: "Pironman"
 description: "Pironman support"
-version: "1.0.11"
+version: "1.0.12"
 slug: "pironman"
+image: "sunfounder/{arch}-addon-pironman"
 init: false
 arch:
   - aarch64
   - armhf
 startup: application
+gpio: true
 devices:
   - /dev/i2c-1
   - /dev/spidev0.0
   - /dev/mem
-gpio: true
-devicetree: true
-host_network: true
-full_access: true
-privileged:
-  - SYS_RAWIO
-  - SYS_RESOURCE
 hassio_api: true
 hassio_role: "manager"
-journald: true
 options:
   temperature_unit: "C"
   fan_temp: 50

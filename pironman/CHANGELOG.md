@@ -1,8 +1,8 @@
 # Changelog
 
-## [1.0.11] - 2024-3-13
+## [1.0.12] - 2024-5-23
 
 ### Fixed
-- Fixed Invalid argument -rw
+- Fixed rebuild on boot 5
 
 

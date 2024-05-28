@@ -23,8 +23,3 @@ COPY run.sh /
 # add execute permission
 RUN chmod a+x /run.sh
 CMD [ "/run.sh" ]
-
-
-# COPY test.sh /
-# RUN chmod a+x /test.sh
-# CMD [ "/test.sh" ]
