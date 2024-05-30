@@ -1,0 +1,32 @@
+name: "Pironman 5"
+description: "Pironman 5 support"
+version: "0.0.19"
+slug: "pironman5"
+image: "sunfounder/{arch}-pironman5"
+init: false
+arch:
+  - aarch64
+  - armhf
+startup: application
+devices:
+  - /dev/i2c-1
+  - /dev/spidev0.0
+  - /dev/mem
+privileged:
+  - SYS_RAWIO
+  - SYS_ADMIN
+gpio: true
+hassio_api: true
+hassio_role: "manager"
+map:
+ - addon_config:rw
+environment:
+  BLINKA_FORCECHIP: "BCM2XXX"
+webui: "http://[HOST]:[PORT:34001]"
+ports: 
+  34001/tcp: 34001
+ports_description:
+  34001/tcp: Pironman 5 Dashboard
+panel_icon: mdi:view-dashboard
+ingress: true
+ingress_port: 34001

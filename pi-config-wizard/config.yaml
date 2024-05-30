@@ -1,0 +1,26 @@
+name: "Pi Config Wizard"
+description: "Help you to config Raspberry Pi"
+version: "1.0.0"
+image: "sunfounder/{arch}-pi-config-wizard"
+slug: "pi-config-wizard"
+init: false
+arch:
+  - aarch64
+  - armhf
+startup: application
+apparmor: false
+privileged:
+  - SYS_RAWIO
+  - SYS_ADMIN
+devices:
+  - /dev/mem
+webui: "http://[HOST]:[PORT:8000]"
+ports: 
+  8000/tcp: 8000
+ports_description:
+  8000/tcp: Web UI
+panel_icon: mdi:wizard-hat
+ingress: true
+ingress_port: 8000
+hassio_role: manager
+hassio_api: true
