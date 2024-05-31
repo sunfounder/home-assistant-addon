@@ -14,6 +14,7 @@
     - [Login the running addon container for debgging](#login-the-running-addon-container-for-debgging)
     - [Home Assistant Supervisor log](#home-assistant-supervisor-log)
     - [App Armor](#app-armor)
+  - [Publish](#publish)
 
 
 ## Pironman Addon
@@ -139,4 +140,34 @@ Check if complain enabled
 
 ```
 docker inspect addon_local_pironman | grep "AppArmorProfile"
+```
+
+## Publish
+
+```bash
+docker build . \
+   --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.0 \
+   -t sunfounder/aarch64-pironman5:1.0.0
+docker build . \
+   --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/armv7:10.0.0 \
+   -t sunfounder/armv7-pironman5:1.0.0
+```
+
+Login to docker hub
+
+```bash
+docker login
+```
+
+Tag the image
+
+```bash
+docker tag sunfounder/aarch64-pironman-5:latest sunfounder/aarch64-pironman-5:1.0.0
+```
+
+Push the image
+
+```bash
+docker push sunfounder/aarch64-pironman-5:5.0.0
+docker push sunfounder/aarch64-pironman-5:latest
 ```
