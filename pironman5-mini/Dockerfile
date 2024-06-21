@@ -12,7 +12,7 @@ ADD https://api.github.com/repos/sunfounder/pironman5-mini/git/refs/heads/main v
 RUN git clone https://github.com/sunfounder/pironman5-mini.git
 
 # install pironman
-RUN cd /pironman5-mini && python3 install.py --skip-auto-start --skip-reboot --skip-dtoverlay --skip-modules --plain-text
+RUN cd /pironman5-mini && python3 install.py --skip-auto-start --skip-reboot --skip-dtoverlay --plain-text
 
 # set the working directory to /data/pironman
 WORKDIR /data

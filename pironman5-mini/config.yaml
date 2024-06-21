@@ -26,7 +26,7 @@ webui: "http://[HOST]:[PORT:34001]"
 ports: 
   34001/tcp: 34001
 ports_description:
-  34001/tcp: Pironman 5 Dashboard
+  34001/tcp: Pironman 5 MiniDashboard
 panel_icon: mdi:view-dashboard
 ingress: true
 ingress_port: 34001
