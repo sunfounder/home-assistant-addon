@@ -12,9 +12,7 @@ devices:
   - /dev/i2c-1
   - /dev/spidev0.0
   - /dev/mem
-  - /dev/zram0
-  - /dev/zram1
-  - /dev/zram2
+  - /dev/zram*
 privileged:
   - SYS_RAWIO
   - SYS_ADMIN
