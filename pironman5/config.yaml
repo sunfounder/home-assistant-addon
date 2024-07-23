@@ -1,6 +1,6 @@
 name: "Pironman 5"
 description: "Pironman 5 support"
-version: "1.0.1"
+version: "1.0.2"
 slug: "pironman5"
 image: "sunfounder/{arch}-pironman5"
 init: false
@@ -12,7 +12,9 @@ devices:
   - /dev/i2c-1
   - /dev/spidev0.0
   - /dev/mem
-  - /dev/zram*
+  - /dev/zram0
+  - /dev/zram1
+  - /dev/zram2
 privileged:
   - SYS_RAWIO
   - SYS_ADMIN
