@@ -22,7 +22,7 @@ hassio_role: "manager"
 map:
  - addon_config:rw
 environment:
-  BLINKA_FORCECHIP: "BCM2712"
+  BLINKA_FORCEBOARD: "RASPBERRY_PI_5"
 webui: "http://[HOST]:[PORT:34001]"
 ports: 
   34001/tcp: 34001
