@@ -1,5 +1,5 @@
 # Changelog
 
-## [1.0.0] - 2024-5-31
+## [1.0.1-RC1] - 2024-7-24
 
-- Test full access
+- Fix zram no such file or directory error
