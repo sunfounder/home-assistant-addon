@@ -22,7 +22,7 @@ hassio_role: "manager"
 map:
  - addon_config:rw
 environment:
-  BLINKA_FORCECHIP: "BCM2XXX"
+  BLINKA_FORCECHIP: "BCM2712"
 webui: "http://[HOST]:[PORT:34001]"
 ports: 
   34001/tcp: 34001
