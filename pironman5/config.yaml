@@ -11,13 +11,12 @@ startup: application
 privileged:
   - SYS_RAWIO
   - SYS_ADMIN
-# gpio: true
-# devices:
-#   - /dev/i2c-1
-#   - /dev/spidev0.0
-#   - /dev/mem
-#   - /dev/zram*
-full_access: true
+gpio: true
+devices:
+  - /dev/i2c-1
+  - /dev/spidev0.0
+  - /dev/mem
+# full_access: true
 hassio_api: true
 hassio_role: "manager"
 map:
