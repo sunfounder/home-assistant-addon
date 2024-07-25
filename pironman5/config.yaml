@@ -23,7 +23,7 @@ map:
  - addon_config:rw
 environment:
   # BLINKA_FORCEBOARD: "RASPBERRY_PI_5"
-  BLINKA_FORCECHIP: "BCM2712"
+  BLINKA_FORCECHIP: "BCM2XXX"
 webui: "http://[HOST]:[PORT:34001]"
 ports: 
   34001/tcp: 34001
