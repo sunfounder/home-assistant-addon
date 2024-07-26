@@ -1,8 +1,8 @@
 name: "Pironman 5"
 description: "Pironman 5 support"
-version: "1.0.1"
+version: "1.0.2"
 slug: "pironman5"
-# image: "sunfounder/{arch}-pironman5"
+image: "sunfounder/{arch}-pironman5"
 init: false
 arch:
   - aarch64
@@ -16,8 +16,6 @@ devices:
   - /dev/i2c-1
   - /dev/spidev0.0
   - /dev/mem
-devicetree: true
-# full_access: true
 hassio_api: true
 hassio_role: "manager"
 map:
