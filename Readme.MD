@@ -151,12 +151,14 @@ docker inspect addon_local_pironman | grep "AppArmorProfile"
 
 ```bash
 docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.1 -t sunfounder/aarch64-pironman5:1.0.2
+docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.1 -t sunfounder/aarch64-pironman5-mini:1.0.1
 ```
 
 给版本打上latest标签。
 
 ```bash
 docker tag sunfounder/aarch64-pironman5:1.0.2 sunfounder/aarch64-pironman5:latest
+docker tag sunfounder/aarch64-pironman5-mini:1.0.1 sunfounder/aarch64-pironman5-mini:latest
 ```
 
 登录docker。如果在Windows下，登录了Docker Desktop，可以省略这一步。

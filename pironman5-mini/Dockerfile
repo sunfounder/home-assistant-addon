@@ -14,6 +14,9 @@ RUN git clone https://github.com/sunfounder/pironman5-mini.git
 # install pironman
 RUN cd /pironman5-mini && python3 install.py --skip-auto-start --skip-reboot --skip-dtoverlay --plain-text
 
+# Replace old version of these packages for compatibility
+RUN /opt/pironman5/venv/bin/pip3 install adafruit_blinka==8.39.2 gpiod==1.5.4
+
 # set the working directory to /data/pironman
 WORKDIR /data
 

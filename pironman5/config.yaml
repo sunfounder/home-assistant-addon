@@ -6,7 +6,6 @@ image: "sunfounder/{arch}-pironman5"
 init: false
 arch:
   - aarch64
-  - armhf
 startup: application
 privileged:
   - SYS_RAWIO

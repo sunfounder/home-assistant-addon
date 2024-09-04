@@ -1,21 +1,20 @@
 name: "Pironman 5 Mini"
 description: "Pironman 5 Mini support"
-version: "1.0.0"
+version: "1.0.1"
 slug: "pironman5-mini"
-image: "sunfounder/{arch}-pironman5-mini"
+# image: "sunfounder/{arch}-pironman5-mini"
 init: false
 arch:
   - aarch64
-  - armhf
 startup: application
-devices:
-  - /dev/i2c-1
-  - /dev/spidev0.0
-  - /dev/mem
 privileged:
   - SYS_RAWIO
   - SYS_ADMIN
 gpio: true
+devices:
+  - /dev/i2c-1
+  - /dev/spidev0.0
+  - /dev/mem
 hassio_api: true
 hassio_role: "manager"
 map:
@@ -26,7 +25,7 @@ webui: "http://[HOST]:[PORT:34001]"
 ports: 
   34001/tcp: 34001
 ports_description:
-  34001/tcp: Pironman 5 MiniDashboard
+  34001/tcp: Pironman 5 Mini Dashboard
 panel_icon: mdi:view-dashboard
 ingress: true
 ingress_port: 34001

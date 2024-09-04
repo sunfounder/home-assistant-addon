@@ -1,5 +1,5 @@
 # Changelog
 
-## [1.0.0] - 2024-5-31
+## [1.0.1] - 2024-9-4
 
-- First Release
+- Update to latest version of Pironman Dashboard
