@@ -161,7 +161,7 @@ docker tag sunfounder/aarch64-pironman5:1.0.2 sunfounder/aarch64-pironman5:lates
 docker tag sunfounder/aarch64-pironman5-mini:1.0.1 sunfounder/aarch64-pironman5-mini:latest
 ```
 
-登录docker。如果在Windows下，登录了Docker Desktop，可以省略这一步。
+登录docker。如果在Windows下，在Docker Desktop上登录，可以省略这一步。
 
 ```bash
 docker login
