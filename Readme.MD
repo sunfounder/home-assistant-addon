@@ -146,7 +146,7 @@ docker inspect addon_local_pironman | grep "AppArmorProfile"
 
 进入需要编译的插件根目录下，执行以下命令：
 注意修改名称和版本号。注意确认基础镜像的版本号。
-可以在Windows下执行，但是需要安装Docker Desktop, 然后运行。
+可以在Windows下执行，但是需要安装Docker Desktop, 然后打开软件，登录，看到左下角显示Engine running。。
 需要编译4个版本，aarch64和armv7，每个版本有两个tag，一个是版本号，一个是latest。
 
 ```bash
