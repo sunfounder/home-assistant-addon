@@ -1,7 +1,5 @@
 # Changelog
 
-## [1.0.2] - 2024-7-25
+## [1.1.0] - 2024-12-03
 
-- Fix zram no such file or directory error
-- Upgrade ubuntu base image to 10.0.1
-- Test downgrade some packages
+- Update UI to 1.1 version
