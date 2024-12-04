@@ -150,7 +150,7 @@ docker inspect addon_local_pironman | grep "AppArmorProfile"
 需要编译4个版本，aarch64和armv7，每个版本有两个tag，一个是版本号，一个是latest。
 
 ```bash
-docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.1 -t sunfounder/aarch64-pironman5:1.0.2
+docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.1 -t sunfounder/aarch64-pironman5:1.1.0
 docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.1 -t sunfounder/aarch64-pironman5-mini:1.0.1
 ```
 
