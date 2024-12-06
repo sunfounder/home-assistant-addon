@@ -1,5 +1,5 @@
 # Changelog
 
-## [1.1.1] - 2024-12-04
+## [1.1.2] - 2024-12-05
 
-- Update UI to 1.1 version
+- Fix compatible for Home Assistant 14

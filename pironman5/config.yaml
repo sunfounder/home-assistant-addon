@@ -1,6 +1,6 @@
 name: "Pironman 5"
 description: "Pironman 5 support"
-version: "1.1.1"
+version: "1.1.2"
 slug: "pironman5"
 image: "sunfounder/{arch}-pironman5"
 init: false
@@ -22,6 +22,7 @@ map:
  - addon_config:rw
 environment:
   BLINKA_FORCECHIP: "BCM2XXX"
+  RPI_LGPIO_REVISION: "d04170"
 webui: "http://[HOST]:[PORT:34001]"
 ports: 
   34001/tcp: 34001
