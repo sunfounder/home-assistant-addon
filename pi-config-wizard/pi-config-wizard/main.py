@@ -27,13 +27,14 @@ def mount_boot():
     except Exception as e:
         return False, str(e)
 
-    status, result = run_command(f'mount -t vfat {boot_partition} /tmp/boot')
+    cmd = f'mount -t vfat {boot_partition} /tmp/boot'
+    status, result = run_command(cmd)
     if status != 0:
-        error = ''
-        if ('permission denied' in result):
-            error = 'PERMISSION_DENIED'
-        else:
-            error = result
+        error = f"Error: Command '{cmd}' failed with status {status} and output '{result}'"
+        # if ('permission denied' in result):
+        #     error = 'PERMISSION_DENIED'
+        # else:
+        #     error = result
         return False, error
     else:
         return True, None
