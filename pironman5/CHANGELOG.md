@@ -1,7 +1,5 @@
 # Changelog
 
-## [1.0.2] - 2024-7-25
+## [1.1.2] - 2024-12-05
 
-- Fix zram no such file or directory error
-- Upgrade ubuntu base image to 10.0.1
-- Test downgrade some packages
+- Fix compatible for Home Assistant 14

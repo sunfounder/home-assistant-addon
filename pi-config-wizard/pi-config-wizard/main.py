@@ -23,11 +23,11 @@ def mount_boot():
     if is_boot_mounted():
         return True, None
     try:
-        disk = get_disk()
+        boot_partition = get_boot_partition()
     except Exception as e:
         return False, str(e)
 
-    status, result = run_command(f'mount -t vfat {disk}p1 /tmp/boot')
+    status, result = run_command(f'mount -t vfat {boot_partition} /tmp/boot')
     if status != 0:
         error = ''
         if ('permission denied' in result):
@@ -67,13 +67,58 @@ def enable_spi():
 def disable_spi():
     edit_config_txt('dtparam=spi', '#dtparam=spi=on\n')
 
-def get_disk():
+# def get_disk():
+#     command = "df /data | awk 'NR==2{print $1}'"
+#     status, result = run_command(command)
+#     if status != 0:
+#         raise Exception(f'Failed to get disk: {result}')
+#     disk = result[:-2]
+#     return disk
+
+def get_data_partition():
+    '''
+    Get which disk is mounted on /data
+    '''
     command = "df /data | awk 'NR==2{print $1}'"
     status, result = run_command(command)
     if status != 0:
         raise Exception(f'Failed to get disk: {result}')
-    disk = result[:-2]
-    return disk
+    return result
+
+def get_parent_disk(partition):
+    '''
+    Get which disk is partition is on
+    '''
+    command = f"lsblk -no pkname {partition}"
+    status, result = run_command(command)
+    if status != 0:
+        raise Exception(f'Failed to get parent disk: {result}')
+    return f'/dev/{result}'
+
+def get_data_disk():
+    '''
+    Get which disk is partition /data is on
+    '''
+    partition = get_data_partition()
+    # Get which disk is partition /data is on
+    return get_parent_disk(partition)
+
+def get_boot_partition():
+    '''
+    Get which disk is mounted on /boot
+    '''
+    disk = get_data_disk()
+    # Get all partitions on the disk
+    command = f"lsblk -no kname {disk}"
+    status, result = run_command(command)
+    if status != 0:
+        raise Exception(f'Failed to get boot partition: {result}')
+    partitions = result.split()
+    partitions = [f'/dev/{partition}' for partition in partitions]
+    partitions.remove(disk)
+    partitions.sort()
+    return partitions[0]
+
 
 class MyRequestHandler(http.server.SimpleHTTPRequestHandler):
 

@@ -1,3 +1,2 @@
 build_from:
-  aarch64: ghcr.io/hassio-addons/ubuntu-base/armv7:9.0.3
-  armhf: ghcr.io/hassio-addons/ubuntu-base/armv7:9.0.3
+  aarch64: ghcr.io/hassio-addons/ubuntu-base/armv7:10.0.1
