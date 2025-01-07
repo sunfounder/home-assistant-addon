@@ -27,17 +27,13 @@ def mount_boot():
     except Exception as e:
         return False, str(e)
 
-    status, result = run_command(f'mount -t vfat {boot_partition} /tmp/boot')
+    cmd = f'mount {boot_partition} /tmp/boot'
+    status, result = run_command(cmd)
     if status != 0:
-        error = ''
-        if ('permission denied' in result):
-            error = 'PERMISSION_DENIED'
-        else:
-            error = result
+        error = f"Error: Command '{cmd}' failed with status {status} and output '{result}'"
         return False, error
     else:
         return True, None
-
 
 def edit_config_txt(search_key, newline):
     found = False
@@ -46,15 +42,27 @@ def edit_config_txt(search_key, newline):
         for i, line in enumerate(lines):
             if search_key in line:
                 lines[i] = newline
-                found = True
-        if not found:
+                break
+        else:
             lines.append(newline)
     with open('/tmp/boot/config.txt', 'w') as file:
         file.writelines(lines)
 
 def enable_i2c():
-    run_command('mkdir -p /tmp/boot/CONFIG/modules')
-    run_command('echo i2c-dev > /tmp/boot/CONFIG/modules/rpi-i2c.conf')
+    # Check if /tmp/boot/CONFIG/modules exists
+    if not os.path.exists('/tmp/boot/CONFIG/modules'):
+        os.makedirs('/tmp/boot/CONFIG/modules')
+    # Check if /tmp/boot/CONFIG/modules/rpi-i2c.conf exists
+    if not os.path.exists('/tmp/boot/CONFIG/modules/rpi-i2c.conf'):
+        with open('/tmp/boot/CONFIG/modules/rpi-i2c.conf', 'w') as file:
+            file.write('i2c-dev\n')
+    else:
+        with open('/tmp/boot/CONFIG/modules/rpi-i2c.conf', 'r') as file:
+            lines = file.readlines()
+            if 'i2c-dev' not in lines:
+                with open('/tmp/boot/CONFIG/modules/rpi-i2c.conf', 'a') as file:
+                    file.write('i2c-dev\n')
+    # 
     edit_config_txt('dtparam=i2c_arm', 'dtparam=i2c_arm=on\n')
 
 def disable_i2c():
@@ -66,14 +74,6 @@ def enable_spi():
 
 def disable_spi():
     edit_config_txt('dtparam=spi', '#dtparam=spi=on\n')
-
-# def get_disk():
-#     command = "df /data | awk 'NR==2{print $1}'"
-#     status, result = run_command(command)
-#     if status != 0:
-#         raise Exception(f'Failed to get disk: {result}')
-#     disk = result[:-2]
-#     return disk
 
 def get_data_partition():
     '''
@@ -138,9 +138,11 @@ class MyRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.respond(200, {'is_mounted': is_mounted})
         elif self.path == f'{URL_PREFIX}/i2c':
             _, result = run_command('ls /dev/i2c*')
+            result = result.strip().split('\n')
             self.respond(200, {'enable': '/dev/i2c-1' in result})
         elif self.path == f'{URL_PREFIX}/spi':
             _, result = run_command('ls /dev/spidev*')
+            result = result.strip().split('\n')
             self.respond(200, {'enable': '/dev/spidev0.0' in result})
         else:
             super().do_GET()
