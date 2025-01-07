@@ -150,15 +150,22 @@ docker inspect addon_local_pironman | grep "AppArmorProfile"
 需要编译4个版本，aarch64和armv7，每个版本有两个tag，一个是版本号，一个是latest。
 
 ```bash
-docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.1 -t sunfounder/aarch64-pironman5:1.1.2
+docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.1 -t sunfounder/aarch64-pironman5:1.1.3
 docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.1 -t sunfounder/aarch64-pironman5-mini:1.0.1
 docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.1 -t sunfounder/aarch64-pi-config-wizard:1.0.1
 ```
 
+> [!WARNING]
+> 如果报错：
+> ```bash
+> ERROR: error during connect: this error may indicate that the docker daemon is not running: Head "http://%2F%2F.%2Fpipe%2Fdocker_engine/_ping": open //./pipe/docker_engine: The system cannot find the file specified.
+> ```
+> 请先启动docker desktop，然后再执行上面的命令。
+
 给版本打上latest标签。
 
 ```bash
-docker tag sunfounder/aarch64-pironman5:1.1.2 sunfounder/aarch64-pironman5:latest
+docker tag sunfounder/aarch64-pironman5:1.1.3 sunfounder/aarch64-pironman5:latest
 docker tag sunfounder/aarch64-pironman5-mini:1.0.1 sunfounder/aarch64-pironman5-mini:latest
 docker tag sunfounder/aarch64-pi-config-wizard:1.0.1 sunfounder/aarch64-pi-config-wizard:latest
 ```
@@ -172,8 +179,21 @@ docker login
 上传4个镜像。注意修改版本号。
 
 ```bash
-docker push sunfounder/aarch64-pironman5:1.1.2
+docker push sunfounder/aarch64-pironman5:1.1.3
 docker push sunfounder/aarch64-pironman5:latest
+
 docker push sunfounder/aarch64-pi-config-wizard:1.0.1
 docker push sunfounder/aarch64-pi-config-wizard:latest
 ```
+
+> [!WARNING]
+> 如果报错：
+> ```bash
+> denied: requested access to the resource is denied
+> ```
+> 请检查是否登录成功, Windows 下打开 Docker Desktop。
+> 如果是Linux下运行命令登录：
+> ```bash
+> docker login
+> ```
+> 登录成功后，再执行上面的命令。

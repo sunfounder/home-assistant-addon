@@ -1,7 +1,7 @@
 name: "Pi Config Wizard"
 description: "Help you to config Raspberry Pi"
 version: "1.0.1"
-# image: "sunfounder/{arch}-pi-config-wizard"
+image: "sunfounder/{arch}-pi-config-wizard"
 slug: "pi-config-wizard"
 url: "https://docs.sunfounder.com/projects/pironman5/en/latest/set_up/set_up_home_assistant.html#install-the-pi-config-wizard-add-on"
 init: false

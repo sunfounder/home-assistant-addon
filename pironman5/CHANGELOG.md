@@ -1,5 +1,5 @@
 # Changelog
 
-## [1.1.2] - 2024-12-05
+## [1.1.3] - 2025-1-6
 
-- Fix compatible for Home Assistant 14
+- fix: Disk Size
