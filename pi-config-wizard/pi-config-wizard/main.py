@@ -6,6 +6,7 @@ import http.server
 import ha_api
 
 URL_PREFIX = '/api/v1'
+CONFIG_TXT_PATH = '/tmp/boot/config.txt'
 ha_api.init()
 
 def run_command(command):
@@ -36,8 +37,7 @@ def mount_boot():
         return True, None
 
 def edit_config_txt(search_key, newline):
-    found = False
-    with open('/tmp/boot/config.txt', 'r') as file:
+    with open(CONFIG_TXT_PATH, 'r') as file:
         lines = file.readlines()
         for i, line in enumerate(lines):
             if search_key in line:
@@ -45,7 +45,17 @@ def edit_config_txt(search_key, newline):
                 break
         else:
             lines.append(newline)
-    with open('/tmp/boot/config.txt', 'w') as file:
+    with open(CONFIG_TXT_PATH, 'w') as file:
+        file.writelines(lines)
+
+def comment_out_config_txt(search_key):
+    lines = []
+    with open(CONFIG_TXT_PATH, 'r') as file:
+        lines = file.readlines()
+        for i, line in enumerate(lines):
+            if search_key in line:
+                lines[i] = f'# {line}'
+    with open(CONFIG_TXT_PATH, 'w') as file:
         file.writelines(lines)
 
 def enable_i2c():
@@ -66,14 +76,16 @@ def enable_i2c():
     edit_config_txt('dtparam=i2c_arm', 'dtparam=i2c_arm=on\n')
 
 def disable_i2c():
-    run_command('rm -rf /tmp/boot/CONFIG/modules/rpi-i2c.conf')
-    edit_config_txt('dtparam=i2c_arm', '#dtparam=i2c_arm=on\n')
+    if os.path.exists('/tmp/boot/CONFIG/modules/rpi-i2c.conf'):
+        os.remove('/tmp/boot/CONFIG/modules/rpi-i2c.conf')
+    comment_out_config_txt('dtparam=i2c_arm')
 
 def enable_spi():
     edit_config_txt('dtparam=spi', 'dtparam=spi=on\n')
 
 def disable_spi():
     edit_config_txt('dtparam=spi', '#dtparam=spi=on\n')
+    comment_out_config_txt('dtparam=spi')
 
 def get_data_partition():
     '''
@@ -119,6 +131,28 @@ def get_boot_partition():
     partitions.sort()
     return partitions[0]
 
+def is_configured(target_line):
+    '''
+    Check if a target_line is already in config.txt
+    '''
+    with open(CONFIG_TXT_PATH, 'r') as file:
+        lines = file.readlines()
+        for line in lines:
+            if line.strip() == target_line:
+                return True
+    return False
+
+def is_i2c_configured():
+    return is_configured('dtparam=i2c_arm=on')
+
+def is_spi_configured():
+    return is_configured('dtparam=spi=on')
+
+def is_i2c_enabled():
+    return os.path.exists('/dev/i2c-1')
+
+def is_spi_enabled():
+    return os.path.exists('/dev/spidev0.0')
 
 class MyRequestHandler(http.server.SimpleHTTPRequestHandler):
 
@@ -130,20 +164,20 @@ class MyRequestHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == f'{URL_PREFIX}/configTxt':
-            with open('/tmp/boot/config.txt', 'r') as file:
+            with open(CONFIG_TXT_PATH, 'r') as file:
                 configTxt = file.read()
             self.respond(200, {'configTxt': configTxt})
         elif self.path == f'{URL_PREFIX}/mounted':
             is_mounted = is_boot_mounted()
             self.respond(200, {'is_mounted': is_mounted})
         elif self.path == f'{URL_PREFIX}/i2c':
-            _, result = run_command('ls /dev/i2c*')
-            result = result.strip().split('\n')
-            self.respond(200, {'enable': '/dev/i2c-1' in result})
+            enabled = is_i2c_enabled()
+            configured = is_i2c_configured()
+            self.respond(200, {'enabled': enabled, 'configured': configured})
         elif self.path == f'{URL_PREFIX}/spi':
-            _, result = run_command('ls /dev/spidev*')
-            result = result.strip().split('\n')
-            self.respond(200, {'enable': '/dev/spidev0.0' in result})
+            enabled = is_spi_enabled()
+            configured = is_spi_configured()
+            self.respond(200, {'enabled': enabled, 'configured': configured})
         else:
             super().do_GET()
 
@@ -153,7 +187,7 @@ class MyRequestHandler(http.server.SimpleHTTPRequestHandler):
             data = self.rfile.read(content_length).decode()
             data = json.loads(data)
             configTxt = data['configTxt']
-            with open('/tmp/boot/config.txt', 'w') as file:
+            with open(CONFIG_TXT_PATH, 'w') as file:
                 file.write(configTxt)
             self.respond(200, {})
         elif self.path == f'{URL_PREFIX}/mount':
@@ -164,7 +198,6 @@ class MyRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.respond(500, {'error': error})
         elif self.path == f'{URL_PREFIX}/i2c':
             enable = json.loads(self.rfile.read(int(self.headers['Content-Length'])).decode())['enable']
-            print(f"i2c: {enable}")
             if enable:
                 enable_i2c()
             else:
@@ -172,7 +205,6 @@ class MyRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.respond(200, {})
         elif self.path == f'{URL_PREFIX}/spi':
             enable = json.loads(self.rfile.read(int(self.headers['Content-Length'])).decode())['enable']
-            print(f"spi: {enable}")
             if enable:
                 enable_spi()
             else:

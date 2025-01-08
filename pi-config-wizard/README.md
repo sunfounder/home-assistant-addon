@@ -15,5 +15,5 @@ help you config your Raspberry Pi.
 6. Reboot to take effect.
 
 > [!WARNING]
-> I2C need to reboot twice to take effect.
+> You may need to reboot twice to take effect.
 
