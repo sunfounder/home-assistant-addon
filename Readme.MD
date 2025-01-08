@@ -150,9 +150,9 @@ docker inspect addon_local_pironman | grep "AppArmorProfile"
 需要编译4个版本，aarch64和armv7，每个版本有两个tag，一个是版本号，一个是latest。
 
 ```bash
-docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.1 -t sunfounder/aarch64-pironman5:1.1.3
-docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.1 -t sunfounder/aarch64-pironman5-mini:1.0.1
-docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.1 -t sunfounder/aarch64-pi-config-wizard:1.0.1
+docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.3 -t sunfounder/aarch64-pironman5:1.1.3-alpha2
+docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.3 -t sunfounder/aarch64-pironman5-mini:1.0.1
+docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.3 -t sunfounder/aarch64-pi-config-wizard:1.0.3-alpha1
 ```
 
 > [!WARNING]
@@ -167,7 +167,7 @@ docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:
 ```bash
 docker tag sunfounder/aarch64-pironman5:1.1.3 sunfounder/aarch64-pironman5:latest
 docker tag sunfounder/aarch64-pironman5-mini:1.0.1 sunfounder/aarch64-pironman5-mini:latest
-docker tag sunfounder/aarch64-pi-config-wizard:1.0.1 sunfounder/aarch64-pi-config-wizard:latest
+docker tag sunfounder/aarch64-pi-config-wizard:1.0.3 sunfounder/aarch64-pi-config-wizard:latest
 ```
 
 登录docker。如果在Windows下，在Docker Desktop上登录，可以省略这一步。
@@ -179,10 +179,10 @@ docker login
 上传4个镜像。注意修改版本号。
 
 ```bash
-docker push sunfounder/aarch64-pironman5:1.1.3
+docker push sunfounder/aarch64-pironman5:1.1.3-alpha2
 docker push sunfounder/aarch64-pironman5:latest
 
-docker push sunfounder/aarch64-pi-config-wizard:1.0.1
+docker push sunfounder/aarch64-pi-config-wizard:1.0.3-alpha1
 docker push sunfounder/aarch64-pi-config-wizard:latest
 ```
 
