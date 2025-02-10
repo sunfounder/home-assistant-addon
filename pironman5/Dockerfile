@@ -20,6 +20,9 @@ RUN /opt/pironman5/venv/bin/pip uninstall RPi.GPIO -y
 RUN /opt/pironman5/venv/bin/pip install rpi.lgpio
 RUN pip install rpi.lgpio --break
 
+# Install libraspberrypi-bin for vcgencmd
+RUN apt-get install -y libraspberrypi-bin
+
 # set the working directory to /data/pironman
 WORKDIR /data
 
