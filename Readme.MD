@@ -12,6 +12,7 @@
   - [Development](#development)
     - [Cleanup image cache](#cleanup-image-cache)
     - [Login the running addon container for debgging](#login-the-running-addon-container-for-debgging)
+    - [Run the image if it's not running as error occurred](#run-the-image-if-its-not-running-as-error-occurred)
     - [Home Assistant Supervisor log](#home-assistant-supervisor-log)
     - [App Armor](#app-armor)
   - [Publish](#publish)
@@ -126,6 +127,16 @@ replace the `<container_name>` in the following command
 docker exec -it <container_name> /bin/bash
 ```
 
+### Run the image if it's not running as error occurred
+
+``` bash
+# List all images
+docker images
+
+# Run the image
+docker run -it <image_name>:<tag> /bin/bash
+```
+
 ### Home Assistant Supervisor log
 
 See supervisor log for appon reflash and install errors
@@ -150,7 +161,7 @@ docker inspect addon_local_pironman | grep "AppArmorProfile"
 需要编译4个版本，aarch64和armv7，每个版本有两个tag，一个是版本号，一个是latest。
 
 ```bash
-docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.3 -t sunfounder/aarch64-pironman5:1.1.4-alpha1
+docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.3 -t sunfounder/aarch64-pironman5:1.1.3
 docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.3 -t sunfounder/aarch64-pironman5-mini:1.0.1
 docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.3 -t sunfounder/aarch64-pi-config-wizard:1.0.3-alpha1
 ```
@@ -165,7 +176,7 @@ docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:
 给版本打上latest标签。
 
 ```bash
-docker tag sunfounder/aarch64-pironman5:1.1.4 sunfounder/aarch64-pironman5:latest
+docker tag sunfounder/aarch64-pironman5:1.1.3 sunfounder/aarch64-pironman5:latest
 docker tag sunfounder/aarch64-pironman5-mini:1.0.1 sunfounder/aarch64-pironman5-mini:latest
 docker tag sunfounder/aarch64-pi-config-wizard:1.0.3 sunfounder/aarch64-pi-config-wizard:latest
 ```
