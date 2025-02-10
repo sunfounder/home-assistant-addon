@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.1.4] - 2025-2-10
+## [1.1.3] - 2025-2-10
 
 - Add GPU Temperature
 - Update UI
