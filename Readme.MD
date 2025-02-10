@@ -190,7 +190,7 @@ docker login
 上传4个镜像。注意修改版本号。
 
 ```bash
-docker push sunfounder/aarch64-pironman5:1.1.3-alpha2
+docker push sunfounder/aarch64-pironman5:1.1.3
 docker push sunfounder/aarch64-pironman5:latest
 
 docker push sunfounder/aarch64-pi-config-wizard:1.0.3
