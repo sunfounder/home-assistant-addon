@@ -28,7 +28,7 @@ def mount_boot():
     except Exception as e:
         return False, str(e)
 
-    cmd = f'mount {boot_partition} /tmp/boot'
+    cmd = f'mount -t vfat {boot_partition} /tmp/boot'
     status, result = run_command(cmd)
     if status != 0:
         error = f"Error: Command '{cmd}' failed with status {status} and output '{result}'"

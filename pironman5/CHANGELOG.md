@@ -1,5 +1,6 @@
 # Changelog
 
-## [1.1.3] - 2025-1-6
+## [1.1.3] - 2025-2-10
 
-- fix: Disk Size
+- Add GPU Temperature
+- Update UI
