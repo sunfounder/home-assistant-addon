@@ -8,7 +8,7 @@ RUN apt-get update
 RUN apt-get install git python3 python3-pip python3-setuptools -y
 
 # clone pironman 5
-ADD https://api.github.com/repos/sunfounder/pironman5/git/refs/heads/main version.json
+ADD https://api.github.com/repos/sunfounder/pironman5/git/refs/heads/dev version.json
 RUN git clone https://github.com/sunfounder/pironman5.git -b dev
 
 # install pironman
