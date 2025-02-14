@@ -1,6 +1,5 @@
 # Changelog
 
-## [1.1.3] - 2025-2-10
+## [1.2.0] - 2025-2-14
 
-- Add GPU Temperature
-- Update UI
+- Fix data not able to persist after restart
