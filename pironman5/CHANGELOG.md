@@ -1,6 +1,5 @@
 # Changelog
 
-## [1.2.1] - 2025-2-14
+## [1.2.2] - 2025-2-17
 
-- Fix data not able to persist after restart
-- 
+- Fix for remote access
