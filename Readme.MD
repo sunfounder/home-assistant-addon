@@ -173,14 +173,6 @@ docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:
 > ```
 > 请先启动docker desktop，然后再执行上面的命令。
 
-给版本打上latest标签。
-
-```bash
-docker tag sunfounder/aarch64-pironman5:1.2.3 sunfounder/aarch64-pironman5:latest
-docker tag sunfounder/aarch64-pironman5-mini:1.0.1 sunfounder/aarch64-pironman5-mini:latest
-docker tag sunfounder/aarch64-pi-config-wizard:1.0.3 sunfounder/aarch64-pi-config-wizard:latest
-```
-
 登录docker。如果在Windows下，在Docker Desktop上登录，可以省略这一步。
 
 ```bash
@@ -191,10 +183,7 @@ docker login
 
 ```bash
 docker push sunfounder/aarch64-pironman5:1.2.3
-docker push sunfounder/aarch64-pironman5:latest
-
 docker push sunfounder/aarch64-pi-config-wizard:1.0.3
-docker push sunfounder/aarch64-pi-config-wizard:latest
 ```
 
 > [!WARNING]
