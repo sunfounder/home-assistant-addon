@@ -160,8 +160,7 @@ docker inspect addon_local_pironman | grep "AppArmorProfile"
 可以在Windows下执行，但是需要安装Docker Desktop, 然后打开软件，登录，看到左下角显示Engine running。。
 
 ```bash
-docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.4 -t sunfounder/aarch64-pironman5:1.2.6
-docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.3 -t sunfounder/aarch64-pironman5-mini:1.0.1
+docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.5 -t sunfounder/aarch64-pironman5:1.2.10
 docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.3 -t sunfounder/aarch64-pi-config-wizard:1.0.3-alpha1
 ```
 
@@ -181,7 +180,7 @@ docker login
 上传4个镜像。注意修改版本号。
 
 ```bash
-docker push sunfounder/aarch64-pironman5:1.2.6
+docker push sunfounder/aarch64-pironman5:1.2.10
 docker push sunfounder/aarch64-pi-config-wizard:1.0.3
 ```
 

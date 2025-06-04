@@ -1,6 +1,6 @@
 name: "Pironman 5"
 description: "Pironman 5 support"
-version: "1.2.6"
+version: "1.2.10"
 slug: "pironman5"
 image: "sunfounder/{arch}-pironman5"
 init: false

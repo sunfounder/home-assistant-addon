@@ -11,16 +11,16 @@ RUN apt-get install git python3 python3-pip python3-setuptools -y
 RUN apt-get install -y libraspberrypi-bin
 
 # clone pironman 5
-RUN git clone https://github.com/sunfounder/pironman5.git -b 1.2.6
+RUN git clone https://github.com/sunfounder/pironman5.git -b 1.2.10
 
 # install pironman
 RUN cd /pironman5 && python3 install.py --skip-auto-start --skip-reboot --skip-dtoverlay --skip-modules --plain-text
 
 # uninstall rpi.gpio
-RUN /opt/pironman5/venv/bin/pip uninstall RPi.GPIO -y
-# install rpi.lgpio instead
-RUN /opt/pironman5/venv/bin/pip install rpi.lgpio
-RUN pip install rpi.lgpio --break
+# RUN /opt/pironman5/venv/bin/pip uninstall RPi.GPIO -y
+# # install rpi.lgpio instead
+# RUN /opt/pironman5/venv/bin/pip install rpi.lgpio
+# RUN pip install rpi.lgpio --break
 
 # downgrade adafruit-blinka to 8.55.0
 RUN /opt/pironman5/venv/bin/pip install adafruit-blinka==8.55.0
