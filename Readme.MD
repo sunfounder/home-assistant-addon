@@ -204,7 +204,7 @@ docker login
 注意修改名称和版本号。注意确认基础镜像的版本号。
 
 ```bash
-docker buildx build --platform linux/arm64/v8 --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.5 -t sunfounder/aarch64-pironman5:1.2.11 --push .
+docker buildx build --platform linux/arm64/v8 --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.5 -t sunfounder/aarch64-pironman5:1.2.12 --push .
 docker buildx build --platform linux/arm64/v8 --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.5 -t sunfounder/aarch64-pi-config-wizard:1.0.3 --push .
 ```
 
