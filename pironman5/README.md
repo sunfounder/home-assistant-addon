@@ -11,18 +11,19 @@ This is an addon for SunFounder Pironman 5 series, Pironman 5, Pironman 5 Mini a
 ## Specifications Comparison
 Below is a comparison of specifications for the Pironman 5 series products:
 
-| Specification          | Pironman 5      | Pironman5 Mini        | Pironman5 Max         |
-|:------------------------:|:-------------------------:|:-----------------------:|:-----------------------:|
-| Compatible Devices     | Raspberry Pi 5          | Raspberry Pi 5        | Raspberry Pi 5        |
-| Input                  | USB Type C, 5V/5A       | USB Type C, 5V/5A     | USB Type C, 5V/5A     |
-| Power Button           | ✔                      | ✔                    | ✔                    |
-| Exterior Material 1    | Silver Aluminum Alloy   | Silver Aluminum Alloy | Black Aluminum Alloy  |
-| Exterior Material 2    | Transparent Acrylic     | Black Acrylic        | Black Acrylic        |
-| Cooler                 | Tower Cooler            | Active Cooler        | Tower Cooler          |
-| IR Receiver            | ✔                      | ✗                    | ✔                    |
-| RGB Fans               | 2 (Auto-lit)           | 1 (Auto-lit)         | 2 (Programmable)     |
-| HDMI Ports             | 2 Standard HDMI         | 2 Micro HDMI         | 2 Standard HDMI       |
-| OLED Screen            | ✔                      | ✗                    | ✔                    |
-| OLED Activation        | Always on              | Always on            | Wake on Tap          |
-| NVMe SSD Support       | 1                      | 1                    | 2                    |
-| Dimension              | 111.9×78.5×117mm       | 67.8×98.6×101.5mm    | 111.9×78.5×117mm     |
+| Specification           | Pironman 5                | Pironman5 Mini            | Pironman5 Max           |
+|:-----------------------:|:-------------------------:|:-------------------------:|:-----------------------:|
+| Compatible Devices      | Raspberry Pi 5            | Raspberry Pi 5            | Raspberry Pi 5          |
+| Input                   | USB Type C, 5V/5A         | USB Type C, 5V/5A         | USB Type C, 5V/5A       |
+| Power Button            | ✔                         | ✔                        | ✔                       |
+| Exterior Material 1     | Silver Aluminum Alloy     | Silver Aluminum Alloy     | Black Aluminum Alloy    |
+| Exterior Material 2     | Transparent Acrylic       | Black Acrylic             | Black Acrylic           |
+| Cooler                  | Tower Cooler              | Active Cooler             | Tower Cooler            |
+| IR Receiver             | ✔                         | X                         | ✔                      |
+| RGB Fans Number         | 2                         | 1                         | 2                       |
+| Fan RGB Mode            | Sync with Fan             | Independent Control       | Independent Control     |
+| HDMI Ports              | 2 Standard HDMI Ports     | 2 Micro HDMI Ports        | 2 Standard HDMI Ports   |
+| OLED Display            | ✔                         | X                         | ✔                      |
+| OLED Activation         | Always on                 |                           | Wake on Tap             |
+| Support NVMe SSD        | 1                         | 1                         | 2                       |
+| Dimension               | 111.9x78.5x117mm          | 67.8x98.6x101.5mm         | 111.9x78.5x117mm        |

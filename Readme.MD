@@ -15,7 +15,12 @@
     - [Run the image if it's not running as error occurred](#run-the-image-if-its-not-running-as-error-occurred)
     - [Home Assistant Supervisor log](#home-assistant-supervisor-log)
     - [App Armor](#app-armor)
+  - [准备工作](#准备工作)
+    - [安装 Docker Buildx](#安装-docker-buildx)
+    - [安装 QEMU 仿真器](#安装-qemu-仿真器)
   - [Publish](#publish)
+    - [登录](#登录)
+    - [编译并上传](#编译并上传)
 
 
 ## Pironman Addon
@@ -153,15 +158,54 @@ Check if complain enabled
 docker inspect addon_local_pironman | grep "AppArmorProfile"
 ```
 
+## 准备工作
+
+如果你需要在windows 要在 x86_64 架构的 Linux 主机上编译 aarch64（ARM64）架构的 Docker 镜像，需要使用 Docker Buildx 和 QEMU 跨架构仿真技术。以下是详细的操作步骤：
+
+### 安装 Docker Buildx
+
+首先，确保你的 Linux 主机上已经安装了 Docker。如果没有安装，可以参考 Docker 官方文档进行安装。
+
+安装 Docker Buildx 插件：
+
+```bash
+
+# 启用 Buildx
+docker buildx install
+
+# 创建并使用支持多架构的 builder
+docker buildx create --name multiarch --use
+```
+
+### 安装 QEMU 仿真器
+
+QEMU 是一个开源的虚拟机模拟器，可以用于在 x86_64 架构的 Linux 主机上运行 ARM64 架构的虚拟机。
+
+```bash
+# 安装 QEMU 静态二进制文件
+docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+```
+
 ## Publish
+
+可以在Windows下执行，但是需要安装Docker Desktop, 然后打开软件，登录，看到左下角显示Engine running.
+
+### 登录
+
+登录docker。如果在Windows下，在Docker Desktop上登录，可以省略这一步。
+
+```bash
+docker login
+```
+
+### 编译并上传
 
 进入需要编译的插件根目录下，执行以下命令：
 注意修改名称和版本号。注意确认基础镜像的版本号。
-可以在Windows下执行，但是需要安装Docker Desktop, 然后打开软件，登录，看到左下角显示Engine running。。
 
 ```bash
-docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.5 -t sunfounder/aarch64-pironman5:1.2.10
-docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.3 -t sunfounder/aarch64-pi-config-wizard:1.0.3-alpha1
+docker buildx build --platform linux/arm64/v8 --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.5 -t sunfounder/aarch64-pironman5:1.2.11 --push .
+docker buildx build --platform linux/arm64/v8 --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:10.0.5 -t sunfounder/aarch64-pi-config-wizard:1.0.3 --push .
 ```
 
 > [!WARNING]
@@ -171,18 +215,6 @@ docker build . --build-arg BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base/aarch64:
 > ```
 > 请先启动docker desktop，然后再执行上面的命令。
 
-登录docker。如果在Windows下，在Docker Desktop上登录，可以省略这一步。
-
-```bash
-docker login
-```
-
-上传4个镜像。注意修改版本号。
-
-```bash
-docker push sunfounder/aarch64-pironman5:1.2.10
-docker push sunfounder/aarch64-pi-config-wizard:1.0.3
-```
 
 > [!WARNING]
 > 如果报错：

@@ -1,7 +1,6 @@
 # Changelog
 
-
-## [1.2.10] - 2025-05-30
+## [1.2.11] - 2025-06-05
 
 ### pironman5
 - Added Gitee support with `--gitee` flag in `sf_installer` for package source switching
@@ -11,6 +10,7 @@
 - Bumped dependencies: `pm_auto` to v1.2.7, `pm_dashboard` to v1.2.7
 - Added version tracking and log removal functionality in installer
 - Fixed OLED sleep timeout value validation and deprecated features in base classes
+- Improved shutdown handling for clean exit
 
 ### pm_auto
 - Resolved RGB reverse issue using `enumerate` for correct LED ordering
