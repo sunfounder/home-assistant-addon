@@ -1,0 +1,49 @@
+name: "Pironman 5 Pro Max"
+description: "Pironman 5 Pro Max support"
+version: "1.3.6a1"
+slug: "pironman5-pro-max"
+# image: "sunfounder/{arch}-pironman5-pro-max"
+init: false
+arch:
+  - aarch64
+startup: application
+apparmor: yes
+privileged:
+  - SYS_RAWIO
+gpio: true
+udev: true
+devices:
+  - /dev/i2c-1
+  - /dev/spidev0.0
+  - /dev/mem
+  - /dev/vcio
+  - /dev/input/event0
+  - /dev/input/event1
+  - /dev/input/event2
+  - /dev/input/event3
+  - /dev/input/event4
+  - /dev/input/event5
+  - /dev/input/event6
+  - /dev/input/event7
+  - /dev/input/event8
+  - /dev/input/event9
+  - /dev/input/event10
+  - /dev/input/event11
+  - /dev/input/event12
+  - /dev/input/event13
+  - /dev/input/event14
+  - /dev/input/event15
+devicetree: true
+hassio_api: true
+hassio_role: "manager"
+environment:
+  BLINKA_FORCECHIP: "BCM2XXX"
+  RPI_LGPIO_REVISION: "d04170"
+webui: "http://[HOST]:[PORT:34001]"
+ports: 
+  34001/tcp: 34001
+ports_description:
+  34001/tcp: Pironman 5 Pro Max Dashboard
+panel_icon: mdi:view-dashboard
+ingress: true
+ingress_port: 34001
