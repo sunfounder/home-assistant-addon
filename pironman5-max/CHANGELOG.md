@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.3.6] - 2026-03-19
+### pironman5
+Update to v1.3.6
+
 ## [1.2.11] - 2025-06-05
 
 ### pironman5
