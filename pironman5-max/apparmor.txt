@@ -1,6 +1,6 @@
 #include <tunables/global>
 
-profile pironman5 flags=(attach_disconnected,mediate_deleted,complain) {
+profile pironman5-max flags=(attach_disconnected,mediate_deleted,complain) {
   #include <abstractions/base>
 
   # Capabilities
@@ -28,7 +28,7 @@ profile pironman5 flags=(attach_disconnected,mediate_deleted,complain) {
   /data/** rw,
 
   # Start new profile for service
-  /usr/local/bin/pironman cx -> pironman,
+  /usr/local/bin/pironman5 cx -> pironman5,
 
   /etc/nsswitch.conf r,
   /usr/bin/who ix,
@@ -38,7 +38,12 @@ profile pironman5 flags=(attach_disconnected,mediate_deleted,complain) {
   /sys/class/gpio/** rw,
   /dev/mem rw,
 
-  profile pironman5 flags=(attach_disconnected,mediate_deleted,complain) {
+  # Access to input for power button
+  # /dev/input/** rw,
+  # /sys/class/input/** r,
+  # /sys/devices/**/input/** r,
+
+  profile pironman5-max flags=(attach_disconnected,mediate_deleted,complain) {
     #include <abstractions/base>
 
     # Receive signals from S6-Overlay
@@ -52,7 +57,7 @@ profile pironman5 flags=(attach_disconnected,mediate_deleted,complain) {
 
     # Access required for service functionality
     /usr/local/bin/pironman5 r,
-    /opt/pironman5/venv/bin/pironman5-service r,
+    /opt/pironman5/venv/bin/pironman5 r,
     /bin/bash rix,
     /bin/echo ix,
     /etc/passwd r,
@@ -66,5 +71,10 @@ profile pironman5 flags=(attach_disconnected,mediate_deleted,complain) {
     /sys/class/gpio/** rw,
     /dev/mem rw,
     /dev/gpiomem rw,
+
+    # Access to input for power button
+    # /dev/input/** rw,
+    # /sys/class/input/** r,
+    # /sys/devices/**/input/** r,
   }
 }
