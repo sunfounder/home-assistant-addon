@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - master
     tags:
       - 'v*'
     paths:
@@ -67,7 +68,16 @@ jobs:
             ADDONS=("pironman5-max")
           fi
           
-          echo "addons=$(printf '%s\n' "${ADDONS[@]}" | jq -R . | jq -s .)" >> $GITHUB_OUTPUT
+          # Build JSON array properly
+          JSON="["
+          for i in "${!ADDONS[@]}"; do
+            if [ $i -gt 0 ]; then
+              JSON+=","
+            fi
+            JSON+="\"${ADDONS[$i]}\""
+          done
+          JSON+="]"
+          echo "addons=${JSON}" >> $GITHUB_OUTPUT
 
   build:
     needs: detect-addons
