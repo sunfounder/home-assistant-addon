@@ -1,0 +1,145 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+    paths:
+      - 'pironman/**'
+      - 'pironman5/**'
+      - 'pironman5-max/**'
+      - 'pironman5-mini/**'
+      - 'pironman5-nas/**'
+      - 'pironman5-ups/**'
+      - 'pi-config-wizard/**'
+      - '.github/workflows/docker-build.yml'
+  pull_request:
+    branches:
+      - main
+      - master
+    paths:
+      - 'pironman/**'
+      - 'pironman5/**'
+      - 'pironman5-max/**'
+      - 'pironman5-mini/**'
+      - 'pironman5-nas/**'
+      - 'pironman5-ups/**'
+      - 'pi-config-wizard/**'
+  workflow_dispatch:
+
+env:
+  REGISTRY: docker.io
+
+jobs:
+  detect-addons:
+    runs-on: ubuntu-latest
+    outputs:
+      addons: ${{ steps.detect.outputs.addons }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect changed addons
+        id: detect
+        run: |
+          ADDONS=()
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            ADDONS=("pironman" "pironman5" "pironman5-max" "pironman5-mini" "pironman5-nas" "pironman5-ups" "pi-config-wizard")
+          elif [ "${{ github.event_name }}" == "push" ] && [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            ADDONS=("pironman" "pironman5" "pironman5-max" "pironman5-mini" "pironman5-nas" "pironman5-ups" "pi-config-wizard")
+          else
+            DIFF_COMMIT="${{ github.event.before }}"
+            if [ -z "$DIFF_COMMIT" ] || [ "$DIFF_COMMIT" == "0000000000000000000000000000000000000000" ]; then
+              DIFF_COMMIT="HEAD~1"
+            fi
+            for addon in pironman pironman5 pironman5-max pironman5-mini pironman5-nas pironman5-ups pi-config-wizard; do
+              if git diff --name-only "$DIFF_COMMIT" "${{ github.sha }}" | grep -q "^${addon}/"; then
+                ADDONS+=("$addon")
+              fi
+            done
+          fi
+          
+          if [ ${#ADDONS[@]} -eq 0 ]; then
+            ADDONS=("pironman5-max")
+          fi
+          
+          echo "addons=$(printf '%s\n' "${ADDONS[@]}" | jq -R . | jq -s .)" >> $GITHUB_OUTPUT
+
+  build:
+    needs: detect-addons
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        addon: ${{ fromJson(needs.detect-addons.outputs.addons) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Read addon config
+        id: config
+        run: |
+          ADDON="${{ matrix.addon }}"
+          VERSION=$(grep '^version:' "${ADDON}/config.yaml" | sed 's/version: *//' | tr -d '"')
+          SLUG=$(grep '^slug:' "${ADDON}/config.yaml" | sed 's/slug: *//' | tr -d '"')
+          IMAGE=$(grep '^image:' "${ADDON}/config.yaml" 2>/dev/null | sed 's/image: *//' | tr -d '"' || echo "")
+          
+          if [ -z "$IMAGE" ]; then
+            IMAGE="sunfounder/{arch}-${SLUG}"
+          fi
+          
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "slug=${SLUG}" >> $GITHUB_OUTPUT
+          echo "image=${IMAGE}" >> $GITHUB_OUTPUT
+          echo "Addon: ${ADDON}, Version: ${VERSION}, Slug: ${SLUG}, Image: ${IMAGE}"
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push for each architecture
+        run: |
+          ADDON="${{ matrix.addon }}"
+          VERSION="${{ steps.config.outputs.version }}"
+          IMAGE_TEMPLATE="${{ steps.config.outputs.image }}"
+          
+          # Parse build.yaml and build for each architecture
+          while IFS= read -r line; do
+            if [[ "$line" =~ ^[[:space:]]*(aarch64|armv7|armhf|amd64|i386):[[:space:]]*(.*) ]]; then
+              arch="${BASH_REMATCH[1]}"
+              base_image="${BASH_REMATCH[2]}"
+              
+              # Convert arch to docker platform
+              case "$arch" in
+                aarch64) platform="linux/arm64/v8" ;;
+                armv7|armhf) platform="linux/arm/v7" ;;
+                amd64) platform="linux/amd64" ;;
+                i386) platform="linux/386" ;;
+              esac
+              
+              # Generate image name from template
+              image=$(echo "$IMAGE_TEMPLATE" | sed "s/{arch}/${arch}/")
+              full_image="${{ env.REGISTRY }}/${image}:${VERSION}"
+              
+              echo "Building ${full_image} for ${platform} using ${base_image}"
+              
+              docker buildx build \
+                --platform "$platform" \
+                --build-arg BUILD_FROM="$base_image" \
+                -t "$full_image" \
+                --push \
+                "$ADDON"
+            fi
+          done < "${ADDON}/build.yaml"
