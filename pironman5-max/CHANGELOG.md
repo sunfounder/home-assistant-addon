@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.3.6.1] - 2026-04-01
+use image for better performance
+
 ## [1.3.6] - 2026-03-19
 ### pironman5
 Update to v1.3.6

@@ -1,8 +1,8 @@
 name: "Pironman 5 Max"
 description: "Pironman 5 Max support"
-version: "1.3.6"
+version: "1.3.6.1"
 slug: "pironman5-max"
-# image: "sunfounder/{arch}-pironman5"
+image: "sunfounder/{arch}-pironman5-max"
 init: false
 arch:
   - aarch64
