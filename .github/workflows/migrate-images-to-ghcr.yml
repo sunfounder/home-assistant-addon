@@ -1,0 +1,73 @@
+# =============================================================================
+# Docker Image Migration: Docker Hub → ghcr.io
+# =============================================================================
+# This workflow copies existing multi-arch Docker images from Docker Hub
+# to GitHub Container Registry (ghcr.io). It pulls the amd64 manifest,
+# re-tags it, and pushes to ghcr.io — the target image remains multi-arch
+# because the manifest list is preserved through the tag+push.
+#
+# Trigger: manual via workflow_dispatch on the Actions tab.
+#
+# Credentials:
+#   Docker Hub:  secrets.DOCKERHUB_USERNAME / secrets.DOCKERHUB_TOKEN
+#   ghcr.io:     secrets.GITHUB_TOKEN (auto-provided)
+#
+# Images to migrate (add/remove entries below):
+#   sunfounder/aarch64-pironman5:1.2.7
+#   sunfounder/aarch64-pironman5:1.2.12
+#   sunfounder/aarch64-pironman5-max:1.3.6.1
+#   sunfounder/aarch64-pi-config-wizard:1.0.3
+# =============================================================================
+
+name: Migrate Docker Images to ghcr.io
+
+on:
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - source: sunfounder/aarch64-pironman5:1.2.7
+            target: ghcr.io/sunfounder/aarch64-pironman5:1.2.7
+          - source: sunfounder/aarch64-pironman5:1.2.12
+            target: ghcr.io/sunfounder/aarch64-pironman5:1.2.12
+          - source: sunfounder/aarch64-pironman5-max:1.3.6.1
+            target: ghcr.io/sunfounder/aarch64-pironman5-max:1.3.6.1
+          - source: sunfounder/aarch64-pi-config-wizard:1.0.3
+            target: ghcr.io/sunfounder/aarch64-pi-config-wizard:1.0.3
+
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull, tag, and push ${{ matrix.source }}
+        run: |
+          set -euo pipefail
+
+          SOURCE="${{ matrix.source }}"
+          TARGET="${{ matrix.target }}"
+
+          echo "==> Pulling ${SOURCE} (platform linux/amd64)"
+          docker pull --platform linux/amd64 "${SOURCE}"
+
+          echo "==> Tagging ${SOURCE} → ${TARGET}"
+          docker tag "${SOURCE}" "${TARGET}"
+
+          echo "==> Pushing ${TARGET}"
+          docker push "${TARGET}"
+
+          echo "==> Done: ${TARGET}"
