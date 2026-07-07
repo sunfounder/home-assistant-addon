@@ -11,7 +11,8 @@ RUN apt-get install git python3 python3-pip python3-setuptools -y
 RUN apt-get install -y libraspberrypi-bin
 
 # clone pironman 5
-RUN git clone -b max --depth=1 https://github.com/sunfounder/pironman5.git
+ARG GITHUB_TOKEN
+RUN git clone -b max --depth=1 https://${GITHUB_TOKEN}@github.com/sunfounder/pironman5.git
 
 # install pironman
 RUN cd /pironman5 && python3 install.py --skip-auto-start --skip-reboot --skip-dtoverlay --skip-modules --plain-text
