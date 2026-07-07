@@ -1,0 +1,42 @@
+name: Mirror Docker Images to ghcr.io
+
+on:
+  workflow_dispatch:
+    inputs:
+      images:
+        description: 'Images to mirror (comma-separated, e.g. aarch64-pironman5:1.2.7,aarch64-pi-config-wizard:1.0.3)'
+        required: true
+        default: 'aarch64-pironman5:1.2.7,aarch64-pironman5:1.2.12,aarch64-pironman5-max:1.3.6.1,aarch64-pi-config-wizard:1.0.3'
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Mirror images
+        run: |
+          set -euo pipefail
+          IFS=',' read -ra IMGS <<< "${{ github.event.inputs.images }}"
+          for img in "${IMGS[@]}"; do
+            img=$(echo "$img" | xargs)
+            [ -z "$img" ] && continue
+            echo "=== Pulling sunfounder/$img ==="
+            docker pull "sunfounder/$img"
+            echo "=== Tagging ghcr.io/sunfounder/$img ==="
+            docker tag "sunfounder/$img" "ghcr.io/sunfounder/$img"
+            echo "=== Pushing ghcr.io/sunfounder/$img ==="
+            docker push "ghcr.io/sunfounder/$img"
+            echo "=== Done: ghcr.io/sunfounder/$img ==="
+          done
