@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       images:
-        description: 'Images to mirror (comma-separated, e.g. aarch64-pi-config-wizard:1.0.3)'
+        description: 'Images to mirror (comma-separated)'
         required: true
         default: 'aarch64-pironman5:1.2.12,aarch64-pironman5-max:1.3.6.1,aarch64-pi-config-wizard:1.0.3'
 
@@ -12,6 +12,12 @@ jobs:
   mirror:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -32,9 +38,11 @@ jobs:
           for img in "${IMGS[@]}"; do
             img=$(echo "$img" | xargs)
             [ -z "$img" ] && continue
-            echo "=== Mirroring sunfounder/$img → ghcr.io/sunfounder/$img ==="
-            docker buildx imagetools create \
-              --tag "ghcr.io/sunfounder/$img" \
-              "sunfounder/$img"
+            echo "=== Pulling sunfounder/$img ==="
+            docker pull "sunfounder/$img"
+            echo "=== Tagging ghcr.io/sunfounder/$img ==="
+            docker tag "sunfounder/$img" "ghcr.io/sunfounder/$img"
+            echo "=== Pushing ==="
+            docker push "ghcr.io/sunfounder/$img"
             echo "OK"
           done
