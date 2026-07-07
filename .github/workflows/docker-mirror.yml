@@ -39,7 +39,7 @@ jobs:
             img=$(echo "$img" | xargs)
             [ -z "$img" ] && continue
             echo "=== Pulling sunfounder/$img ==="
-            docker pull "sunfounder/$img"
+            docker pull --platform linux/arm64 "sunfounder/$img"
             echo "=== Tagging ghcr.io/sunfounder/$img ==="
             docker tag "sunfounder/$img" "ghcr.io/sunfounder/$img"
             echo "=== Pushing ==="
