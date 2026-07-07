@@ -1,3 +1,12 @@
+# Registry Configuration:
+# This workflow pushes to both Docker Hub and GitHub Container Registry (ghcr.io).
+# To add or change registries:
+#   1. Add/remove -t flags in the "Build and push" step below
+#   2. Add/remove login steps for each registry
+#   3. Docker Hub: requires DOCKERHUB_USERNAME + DOCKERHUB_TOKEN secrets
+#   4. ghcr.io: uses GITHUB_TOKEN (auto-provided by GitHub Actions)
+#   5. Other registries (Quay, AWS ECR, etc.): add a login step + corresponding -t flag
+
 name: Build and Push Docker Images
 
 on:
@@ -119,6 +128,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build and push for each architecture
         run: |
           ADDON="${{ matrix.addon }}"
@@ -141,14 +157,16 @@ jobs:
               
               # Generate image name from template
               image=$(echo "$IMAGE_TEMPLATE" | sed "s/{arch}/${arch}/")
-              full_image="${{ env.REGISTRY }}/${image}:${VERSION}"
+              dh_image="${{ env.REGISTRY }}/${image}:${VERSION}"
+              ghcr_image="ghcr.io/${image}:${VERSION}"
               
-              echo "Building ${full_image} for ${platform} using ${base_image}"
+              echo "Building ${dh_image} + ${ghcr_image} for ${platform} using ${base_image}"
               
               docker buildx build \
                 --platform "$platform" \
                 --build-arg BUILD_FROM="$base_image" \
-                -t "$full_image" \
+                -t "$dh_image" \
+                -t "$ghcr_image" \
                 --push \
                 "$ADDON"
             fi
