@@ -165,6 +165,7 @@ jobs:
               docker buildx build \
                 --platform "$platform" \
                 --build-arg BUILD_FROM="$base_image" \
+                --build-arg GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
                 -t "$dh_image" \
                 -t "$ghcr_image" \
                 --push \
