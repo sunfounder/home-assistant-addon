@@ -12,17 +12,17 @@ ADD https://api.github.com/repos/sunfounder/pironman/git/refs/heads/v2.0 version
 # clone pironman
 RUN git clone -b v2.0 --depth 1 https://github.com/sunfounder/pironman.git
 
-# pironman v2.0 install.py installs libtiff5-dev, which does not exist on
-# Ubuntu 24.04 (noble) used by ubuntu-base 10.x; libtiff-dev is the replacement.
-RUN sed -i 's/libtiff5-dev/libtiff-dev/g' /pironman/install.py
-
-# On noble, the pip shipped by python3-pip is debian-managed and cannot be
-# upgraded in place (no RECORD file), which makes install.py fail the whole
-# build. Make the pip upgrade step non-fatal - pip 24.0 is recent enough.
-RUN sed -i 's|python3 -m pip install --upgrade pip |python3 -m pip install --upgrade pip \|\| true |' /pironman/install.py
-
-# rpi-ws281x is installed separately from a patched source below.
-RUN sed -i "/'rpi-ws281x',/d" /pironman/install.py
+# pironman v2.0 install.py patches for the Ubuntu 24.04 (noble) base image:
+# - libtiff5-dev does not exist on noble; libtiff-dev is the replacement
+# - the pip self-upgrade fails on noble (debian-managed pip, no RECORD file),
+#   which aborts the whole build; make it a no-op
+# - rpi-ws281x is installed separately from a patched source (see below)
+RUN sed -i 's/libtiff5-dev/libtiff-dev/g' /pironman/install.py && \
+    sed -i "s#cmd=f'python3 -m pip install --upgrade pip {_is_bsps}')#cmd='true')#" /pironman/install.py && \
+    sed -i "/'rpi-ws281x',/d" /pironman/install.py && \
+    grep -q 'libtiff-dev' /pironman/install.py && \
+    grep -q "cmd='true')" /pironman/install.py && \
+    ! grep -q "'rpi-ws281x'" /pironman/install.py
 
 # install pironman
 RUN cd /pironman && python3 install.py --skip-config-txt --skip-auto-startup --skip-reboot
