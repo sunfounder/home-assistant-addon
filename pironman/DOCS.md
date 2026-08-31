@@ -1,12 +1,44 @@
 # Pironman Tutorial
 
-## Setup config.txt
+> This addon only works with **Home Assistant OS running on a Raspberry Pi**.
+> It does not work with Home Assistant Container or other installation methods.
 
-You need to setup config.txt to enable I2C and SPI.
+The addon shows hardware information (CPU temperature, usage, RAM, disk, IP
+address) on the Pironman OLED display, controls the fan and the RGB strip,
+and shuts down the Home Assistant host when the power button is long-pressed.
 
-> This only works for Home Assistant OS, running on Raspberry Pi. Not for Home Assistant Container. Which means this only support for the os install on Raspbberry Pi. Not for the docker container.
+## Install
 
-You will need:
+1. In Home Assistant, go to **Settings -> Apps -> App store -> Repositories** (three-dot menu) and add the SunFounder repository:
+   `https://github.com/sunfounder/home-assistant-addon`
+2. Refresh the store, find the **Pironman** addon and install it.
+3. Open the **Configuration** tab of the addon and set the options, in particular:
+   - `rgb_pin`: how the RGB strip of your case is driven.
+     - `10` (SPI): newer Pironman cases (default).
+     - `12` (PWM): early Pironman cases, the RGB uses the audio channel.
+     - `21` (PCM): cases wired for the PCM output.
+4. Start the addon.
+
+## First start (boot configuration)
+
+Current Home Assistant OS releases ship with I2C/SPI disabled. On start, the
+addon automatically checks and prepares the boot configuration
+(`config.txt` + `CONFIG/modules` on the boot partition), enabling:
+
+- I2C (OLED display),
+- SPI + fixed core frequency (SPI RGB, when `rgb_pin` is 10), or audio off
+  (PWM RGB, when `rgb_pin` is 12),
+- the `gpio-poweroff` overlay (complete power-off on shutdown),
+- the `gpio-ir` overlay (IR remote receiver).
+
+**Reboot Home Assistant once** after the first start of the addon (the addon
+logs a warning when a reboot is required). The fan and the power button work
+immediately; the OLED display and the RGB strip start working after the reboot.
+
+## Manual boot configuration (fallback)
+
+If the addon cannot prepare the boot configuration for you, configure it
+manually. You will need:
 
  - SD card reader
  - SD card with Home Assistant Operating System flashed on it
@@ -20,12 +52,12 @@ Shutdown/turn-off your Home Assistant installation and unplug the SD card. Plug 
   i2c-dev
   ```
 - In the root of the `hassos-boot` partition, **edit the file called** `config.txt` **add four lines** to it:
-   ```
-   dtparam=i2c_vc=on
-   dtparam=i2c_arm=on
-   dtoverlay=gpio-poweroff,gpio_pin=26,active_low=0
-   dtoverlay=gpio-ir,gpio_pin=13
-   ```
+  ```
+  dtparam=i2c_vc=on
+  dtparam=i2c_arm=on
+  dtoverlay=gpio-poweroff,gpio_pin=26,active_low=0
+  dtoverlay=gpio-ir,gpio_pin=13
+  ```
 - To enable RGB, selected one driver and make sure you set up the main board respectivly. continue editing the `config.txt` file:
   > Earlier version of pironman only have one driver, PWM(GPIO12).
   - For PWM(GPIO12), it use audio to drive the led, so turn off the audio.

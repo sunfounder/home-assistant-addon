@@ -24,6 +24,28 @@ echo "rgb_speed: $rgb_speed"
 echo "rgb_freq: $rgb_freq"
 echo "rgb_pin: $rgb_pin"
 
+# Check and prepare the Home Assistant OS boot configuration so that the
+# OLED display (I2C) and RGB strip (SPI/PWM) devices are available.
+bashio::log.info "Checking Home Assistant OS boot configuration..."
+boot_config_result=0
+bash /boot-config.sh "$rgb_pin" || boot_config_result=$?
+case "$boot_config_result" in
+    1)
+        bashio::log.warning ""
+        bashio::log.warning "The boot configuration is ready, but a restart of the"
+        bashio::log.warning "Home Assistant host is required for the OLED display"
+        bashio::log.warning "and RGB strip to become available. Fan and power button"
+        bashio::log.warning "will keep working until then."
+        bashio::log.warning ""
+        ;;
+    2)
+        bashio::log.warning ""
+        bashio::log.warning "Failed to check/update the boot configuration."
+        bashio::log.warning "Please configure /boot manually (see the documentation)."
+        bashio::log.warning ""
+        ;;
+esac
+
 bash /usr/local/bin/pironman start -F \
     -u $temperature_unit \
     -f $fan_temp \

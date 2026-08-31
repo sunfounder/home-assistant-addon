@@ -1,6 +1,6 @@
 name: "Pironman"
 description: "Pironman support"
-version: "1.0.12"
+version: "1.0.13"
 slug: "pironman"
 image: "sunfounder/{arch}-addon-pironman"
 init: false
@@ -8,6 +8,8 @@ arch:
   - aarch64
   - armhf
 startup: application
+privileged:
+  - SYS_ADMIN
 gpio: true
 devices:
   - /dev/i2c-1
