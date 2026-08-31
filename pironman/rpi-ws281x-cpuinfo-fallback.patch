@@ -1,0 +1,54 @@
+Fall back to /proc/cpuinfo on aarch64 when /proc/device-tree is not
+available (e.g. inside Home Assistant OS containers).
+
+--- a/lib/rpihw.c
++++ b/lib/rpihw.c
+@@ -562,11 +562,47 @@
+ #ifdef __aarch64__
+     // On ARM64, read revision from /proc/device-tree as it is not shown in
+     // /proc/cpuinfo
+     FILE *f = fopen("/proc/device-tree/system/linux,revision", "r");
+     if (!f)
+     {
+-        return NULL;
++        // /proc/device-tree is not exposed inside containers (e.g. Home
++        // Assistant OS). Fall back to /proc/cpuinfo, which is available.
++        char line[LINE_WIDTH_MAX];
++        f = fopen("/proc/cpuinfo", "r");
++        if (!f)
++        {
++            return NULL;
++        }
++        while (fgets(line, LINE_WIDTH_MAX - 1, f))
++        {
++            if (strstr(line, HW_VER_STRING))
++            {
++                char *substr = strstr(line, ": ");
++                if (!substr)
++                {
++                    continue;
++                }
++                errno = 0;
++                rev = strtoul(&substr[1], NULL, 16);  // Base 16
++                if (errno)
++                {
++                    continue;
++                }
++                rev &= ~(RPI_WARRANTY_MASK | RPI_MANUFACTURER_MASK);
++                for (i = 0; i < (sizeof(rpi_hw_info) / sizeof(rpi_hw_info[0])); i++)
++                {
++                    uint32_t hwver = rpi_hw_info[i].hwver;
++                    hwver &= ~(RPI_WARRANTY_MASK | RPI_MANUFACTURER_MASK);
++                    if (rev == hwver)
++                    {
++                        result = &rpi_hw_info[i];
++                        goto done;
++                    }
++                }
++            }
++        }
++        goto done;
+     }
+     size_t read = fread(&rev, 1, sizeof(uint32_t), f);
+     if (read != sizeof(uint32_t))
+         goto done;

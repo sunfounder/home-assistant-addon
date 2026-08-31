@@ -21,8 +21,23 @@ RUN sed -i 's/libtiff5-dev/libtiff-dev/g' /pironman/install.py
 # build. Make the pip upgrade step non-fatal - pip 24.0 is recent enough.
 RUN sed -i 's|python3 -m pip install --upgrade pip |python3 -m pip install --upgrade pip \|\| true |' /pironman/install.py
 
+# rpi-ws281x is installed separately from a patched source below.
+RUN sed -i "/'rpi-ws281x',/d" /pironman/install.py
+
 # install pironman
 RUN cd /pironman && python3 install.py --skip-config-txt --skip-auto-startup --skip-reboot
+
+# rpi-ws281x 5.x on aarch64 reads the board revision from /proc/device-tree,
+# which is not exposed inside Home Assistant OS containers. Install a patched
+# copy that falls back to /proc/cpuinfo.
+COPY rpi-ws281x-cpuinfo-fallback.patch /
+RUN apt-get install patch -y && \
+    mkdir -p /tmp/ws281x && cd /tmp/ws281x && \
+    pip3 download --no-deps --no-binary :all: rpi-ws281x==5.0.0 -d . && \
+    tar xzf rpi_ws281x-5.0.0.tar.gz && \
+    cd rpi_ws281x-5.0.0 && \
+    patch -p1 < /rpi-ws281x-cpuinfo-fallback.patch && \
+    pip3 install --break-system-packages --no-deps .
 
 # set the working directory to /data/pironman
 WORKDIR /data
