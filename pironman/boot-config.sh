@@ -161,6 +161,28 @@ fi
 
 umount "$BOOT_MOUNT" 2>/dev/null
 
+# ---- write the module file to the persistent modules-load.d overlay -----
+# The boot partition CONFIG/modules is a one-shot import: haos-config copies
+# it into the persistent /etc/modules-load.d overlay and deletes the source,
+# and it runs after systemd-modules-load, so the import only takes effect on
+# the following boot. Writing the entry directly into the hassos-overlay
+# partition makes the module load on the very next boot (single reboot).
+OVERLAY_PART="$(findfs LABEL=hassos-overlay 2>/dev/null)"
+if [ -n "$OVERLAY_PART" ]; then
+    mkdir -p /tmp/overlay
+    if ! mountpoint -q /tmp/overlay; then
+        if mount -t ext4 "$OVERLAY_PART" /tmp/overlay 2>/dev/null; then
+            mkdir -p /tmp/overlay/etc/modules-load.d
+            if ! grep -qxF 'i2c-dev' /tmp/overlay/etc/modules-load.d/rpi-i2c.conf 2>/dev/null; then
+                echo 'i2c-dev' >> /tmp/overlay/etc/modules-load.d/rpi-i2c.conf
+                sync
+                log "wrote i2c-dev to persistent modules-load.d overlay ($OVERLAY_PART)"
+            fi
+            umount /tmp/overlay 2>/dev/null
+        fi
+    fi
+fi
+
 if [ "$NEED_REBOOT" = 1 ]; then
     log "a host reboot is required (i2c-1: $I2C_OK, spidev0.0: $SPI_OK)"
     exit 1
