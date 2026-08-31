@@ -16,6 +16,11 @@ RUN git clone -b v2.0 --depth 1 https://github.com/sunfounder/pironman.git
 # Ubuntu 24.04 (noble) used by ubuntu-base 10.x; libtiff-dev is the replacement.
 RUN sed -i 's/libtiff5-dev/libtiff-dev/g' /pironman/install.py
 
+# On noble, the pip shipped by python3-pip is debian-managed and cannot be
+# upgraded in place (no RECORD file), which makes install.py fail the whole
+# build. Make the pip upgrade step non-fatal - pip 24.0 is recent enough.
+RUN sed -i 's|python3 -m pip install --upgrade pip |python3 -m pip install --upgrade pip \|\| true |' /pironman/install.py
+
 # install pironman
 RUN cd /pironman && python3 install.py --skip-config-txt --skip-auto-startup --skip-reboot
 
