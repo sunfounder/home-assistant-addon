@@ -133,7 +133,10 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          # GITHUB_TOKEN cannot create new organization packages on ghcr.io
+          # ("installation not allowed to Create organization package"), use
+          # the same PAT as the docker-mirror workflow.
+          password: ${{ secrets.GHCR_PAT }}
 
       - name: Build and push for each architecture
         run: |
