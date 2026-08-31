@@ -32,7 +32,7 @@ bash /boot-config.sh "$rgb_pin" || boot_config_result=$?
 case "$boot_config_result" in
     1)
         bashio::log.warning ""
-        bashio::log.warning "The boot configuration was updated. A restart of the"
+        bashio::log.warning "The boot configuration is ready, but a restart of the"
         bashio::log.warning "Home Assistant host is required for the OLED display"
         bashio::log.warning "and RGB strip to become available. Fan and power button"
         bashio::log.warning "will keep working until then."
