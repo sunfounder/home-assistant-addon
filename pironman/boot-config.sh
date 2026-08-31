@@ -50,7 +50,7 @@ config_key() {
     if echo "$line" | grep -q ','; then
         key="$(echo "$line" | cut -d, -f1)"
     else
-        key="$(echo "$line" | cut -d= -f1)"
+        key="$(echo "$line" | sed 's/=[^=]*$//')"
     fi
     printf '%s\n' "$key"
 }
