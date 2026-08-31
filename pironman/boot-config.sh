@@ -11,7 +11,7 @@
 #
 # Exit codes:
 #   0 - boot config is up to date, nothing to do
-#   1 - boot config is applied but a host reboot is still pending
+#   1 - boot config was updated or is applied but a host reboot is still pending
 #   2 - failed to check/update the boot config
 
 RGB_PIN="${1:-10}"
@@ -44,7 +44,7 @@ has_config() { grep -qxF "$1" "$CONFIG_TXT" 2>/dev/null; }
 
 # Extract the config.txt option name used for matching:
 #   "dtoverlay=gpio-ir,gpio_pin=13" -> "dtoverlay=gpio-ir"  (key ends at first comma)
-#   "dtparam=i2c_arm=on"           -> "dtparam=i2c_arm"    (key ends at first =)
+#   "dtparam=i2c_arm=on"           -> "dtparam=i2c_arm"    (key ends before the value)
 config_key() {
     local line="$1" key
     if echo "$line" | grep -q ','; then
@@ -82,43 +82,6 @@ core_freq_min=500"
         ;;
 esac
 
-# ---- check current state -----------------------------------------------
-I2C_OK=0
-[ -e /dev/i2c-1 ] && I2C_OK=1
-SPI_OK=0
-[ -e /dev/spidev0.0 ] && SPI_OK=1
-
-NEED_WRITE=0
-NEED_REBOOT=0
-
-# devices that are required but not present yet?
-[ "$I2C_OK" = 0 ] && NEED_REBOOT=1
-if [ "$RGB_PIN" = 10 ] && [ "$SPI_OK" = 0 ]; then
-    NEED_REBOOT=1
-fi
-
-# required config lines / modules file present?
-if [ ! -f "$MODULES_CONF" ] || ! grep -qxF 'i2c-dev' "$MODULES_CONF" 2>/dev/null; then
-    NEED_WRITE=1
-fi
-if [ ! -f "$CONFIG_TXT" ]; then
-    NEED_WRITE=1
-else
-    while IFS= read -r line; do
-        has_config "$line" || { NEED_WRITE=1; break; }
-    done <<< "$REQUIRED_LINES"
-fi
-
-if [ "$NEED_WRITE" = 0 ] && [ "$NEED_REBOOT" = 0 ]; then
-    log "boot config OK (i2c-1: $I2C_OK, spidev0.0: $SPI_OK)"
-    exit 0
-fi
-
-if [ "$NEED_WRITE" = 0 ]; then
-    log "boot config already applied, a host reboot is still pending"
-    exit 1
-fi
-
 # ---- locate the boot partition (same approach as pi-config-wizard) ------
 DATA_PART="$(df /data 2>/dev/null | awk 'NR==2 {print $1}')"
 if [ -z "$DATA_PART" ]; then
@@ -150,18 +113,48 @@ if [ ! -f "$CONFIG_TXT" ]; then
     exit 2
 fi
 
-# ---- write modules file -------------------------------------------------
-mkdir -p "$BOOT_MOUNT/CONFIG/modules"
-grep -qxF 'i2c-dev' "$MODULES_CONF" 2>/dev/null || echo 'i2c-dev' >> "$MODULES_CONF"
+# ---- check current state (after mounting) -------------------------------
+I2C_OK=0
+[ -e /dev/i2c-1 ] && I2C_OK=1
+SPI_OK=0
+[ -e /dev/spidev0.0 ] && SPI_OK=1
 
-# ---- update config.txt --------------------------------------------------
+NEED_WRITE=0
+NEED_REBOOT=0
+
+# devices that are required but not present yet?
+[ "$I2C_OK" = 0 ] && NEED_REBOOT=1
+if [ "$RGB_PIN" = 10 ] && [ "$SPI_OK" = 0 ]; then
+    NEED_REBOOT=1
+fi
+
+# required config lines / modules file present?
+if [ ! -f "$MODULES_CONF" ] || ! grep -qxF 'i2c-dev' "$MODULES_CONF" 2>/dev/null; then
+    NEED_WRITE=1
+fi
 while IFS= read -r line; do
-    has_config "$line" || edit_config_txt "$(config_key "$line")" "$line"
+    has_config "$line" || { NEED_WRITE=1; break; }
 done <<< "$REQUIRED_LINES"
 
-sync
+# ---- update what is missing ---------------------------------------------
+if [ "$NEED_WRITE" = 1 ]; then
+    mkdir -p "$BOOT_MOUNT/CONFIG/modules"
+    grep -qxF 'i2c-dev' "$MODULES_CONF" 2>/dev/null || echo 'i2c-dev' >> "$MODULES_CONF"
+    while IFS= read -r line; do
+        has_config "$line" || edit_config_txt "$(config_key "$line")" "$line"
+    done <<< "$REQUIRED_LINES"
+    sync
+    log "boot config updated on $BOOT_PART:"
+    log "$REQUIRED_LINES"
+else
+    log "boot config already applied"
+fi
+
 umount "$BOOT_MOUNT" 2>/dev/null
 
-log "boot config updated on $BOOT_PART:"
-log "$REQUIRED_LINES"
-exit 1
+if [ "$NEED_REBOOT" = 1 ]; then
+    log "a host reboot is required (i2c-1: $I2C_OK, spidev0.0: $SPI_OK)"
+    exit 1
+fi
+log "boot config OK (i2c-1: $I2C_OK, spidev0.0: $SPI_OK)"
+exit 0
