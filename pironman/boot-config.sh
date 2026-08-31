@@ -129,9 +129,18 @@ if [ "$RGB_PIN" = 10 ] && [ "$SPI_OK" = 0 ]; then
 fi
 
 # required config lines / modules file present?
-if [ ! -f "$MODULES_CONF" ] || ! grep -qxF 'i2c-dev' "$MODULES_CONF" 2>/dev/null; then
-    NEED_WRITE=1
-fi
+# Right after a host reboot the boot partition can be briefly rewritten by
+# the host itself, so retry the modules file check before concluding it is
+# missing.
+MODULES_OK=0
+for _attempt in 1 2 3; do
+    if [ -f "$MODULES_CONF" ] && grep -qxF 'i2c-dev' "$MODULES_CONF" 2>/dev/null; then
+        MODULES_OK=1
+        break
+    fi
+    sleep 2
+done
+[ "$MODULES_OK" = 0 ] && NEED_WRITE=1
 while IFS= read -r line; do
     has_config "$line" || { NEED_WRITE=1; break; }
 done <<< "$REQUIRED_LINES"
