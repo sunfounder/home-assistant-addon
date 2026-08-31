@@ -42,6 +42,19 @@ edit_config_txt() {
 
 has_config() { grep -qxF "$1" "$CONFIG_TXT" 2>/dev/null; }
 
+# Extract the config.txt option name used for matching:
+#   "dtoverlay=gpio-ir,gpio_pin=13" -> "dtoverlay=gpio-ir"  (key ends at first comma)
+#   "dtparam=i2c_arm=on"           -> "dtparam=i2c_arm"    (key ends at first =)
+config_key() {
+    local line="$1" key
+    if echo "$line" | grep -q ','; then
+        key="$(echo "$line" | cut -d, -f1)"
+    else
+        key="$(echo "$line" | cut -d= -f1)"
+    fi
+    printf '%s\n' "$key"
+}
+
 # ---- required config.txt lines depending on the RGB pin -----------------
 REQUIRED_LINES="dtparam=i2c_arm=on
 dtparam=i2c_vc=on
@@ -143,7 +156,7 @@ grep -qxF 'i2c-dev' "$MODULES_CONF" 2>/dev/null || echo 'i2c-dev' >> "$MODULES_C
 
 # ---- update config.txt --------------------------------------------------
 while IFS= read -r line; do
-    has_config "$line" || edit_config_txt "${line%%=*}" "$line"
+    has_config "$line" || edit_config_txt "$(config_key "$line")" "$line"
 done <<< "$REQUIRED_LINES"
 
 sync
