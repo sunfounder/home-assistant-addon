@@ -39,6 +39,9 @@ RUN apt-get install patch -y && \
     patch -p1 < /rpi-ws281x-cpuinfo-fallback.patch && \
     pip3 install --break-system-packages --no-deps .
 
+# pip caches wheels and build artifacts; drop them to keep the image small
+RUN rm -rf /root/.cache/pip
+
 # set the working directory to /data/pironman
 WORKDIR /data
 
