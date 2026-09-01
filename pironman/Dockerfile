@@ -10,7 +10,8 @@ RUN apt-get install git python3 python3-pip python3-setuptools procps -y
 # add github branch ref to invalidating the docker cache.
 ADD https://api.github.com/repos/sunfounder/pironman/git/refs/heads/v2.0 version.json
 # clone pironman
-RUN git clone -b v2.0 --depth 1 https://github.com/sunfounder/pironman.git
+ARG GITHUB_TOKEN
+RUN git clone -b v2.0 --depth 1 https://${GITHUB_TOKEN}@github.com/sunfounder/pironman.git
 
 # pironman v2.0 install.py patches for the Ubuntu 24.04 (noble) base image:
 # - libtiff5-dev does not exist on noble; libtiff-dev is the replacement
