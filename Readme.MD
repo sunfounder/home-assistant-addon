@@ -33,6 +33,18 @@ You need to setup config.txt to enable I2C and SPI for Pironman.
 
 > This only works for Home Assistant OS, running on Raspberry Pi. Not for Home Assistant Container.
 
+### Home Assistant Container
+
+If you are running Home Assistant Container instead of Home Assistant OS, the SunFounder add-on cannot be installed because Home Assistant Container does not provide the Supervisor/add-on environment required by this repository.
+
+For Home Assistant Container users, you can use the community **Pironman 5 Home Assistant integration** by Christoph Komenda instead. It communicates with the local Pironman Dashboard REST API and provides monitoring and control of Pironman 5 and Pironman 5 Max directly from Home Assistant.
+
+- **Home Assistant integration:** https://github.com/ChristophKomenda/pironman5-homeassistant
+- **HACS:** The integration is available through HACS.
+- **API:** The integration connects to the local Pironman Dashboard API on port `34001`.
+
+> Note: The Pironman service and its local Dashboard/API must already be running on the Raspberry Pi. The integration does not replace the Pironman software itself.
+
 You will need:
 
  - SD card reader
