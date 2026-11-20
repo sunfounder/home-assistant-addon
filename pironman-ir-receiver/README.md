@@ -63,10 +63,30 @@ project.
 python3 -m unittest discover -s pironman-ir-receiver/tests -v
 ```
 
+### Live end-to-end validation on Home Assistant Container (21 November 2026)
+
+**Confirmed successful on real hardware:** Raspberry Pi 5 / Pironman 5 Max,
+Debian host, and Home Assistant Container. A real IR remote was received through
+GPIO13 and `/dev/lirc0`, processed by the standalone SunFounder Docker bridge,
+forwarded to Home Assistant, handled by the native `InfraredReceiverEntity`,
+and **displayed in the HAIR Sniffer**.
+
+The Home Assistant custom integration was independently verified using a valid
+REST API event: the receiver ID matched, 18 sample timings passed validation,
+and `_handle_received_signal()` returned without error. Earlier manual events
+contained empty data (`{}`), which explained their rejection; this was not
+a confirmed defect in the integration.
+
+**Important:** These tests validate Home Assistant **Container on Debian**,
+**not Home Assistant OS**. Actual HAOS Supervisor proxy authentication, device
+mapping, and complete HAOS-to-HAIR behavior still require confirmation by an
+HAOS tester.
+
 ## Known limitations
 
-The add-on image build, actual GPIO/LIRC device access on HAOS, Supervisor event
-forwarding, and full HAIR end-to-end flow require testing on real hardware.
+Local Docker, real IR hardware, Home Assistant Container, and HAIR Sniffer have
+now been tested successfully. HAOS Supervisor authentication, mapping, and
+end-to-end HAIR functionality still require independent HAOS testing.
 Please keep this PR as a **draft** until that validation succeeds.
 
 
