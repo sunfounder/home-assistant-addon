@@ -68,3 +68,38 @@ python3 -m unittest discover -s pironman-ir-receiver/tests -v
 The add-on image build, actual GPIO/LIRC device access on HAOS, Supervisor event
 forwarding, and full HAIR end-to-end flow require testing on real hardware.
 Please keep this PR as a **draft** until that validation succeeds.
+
+
+## Diagnostics: optional debug logging
+
+Set `debug: true` in the **Pironman IR Receiver** app options and restart the
+app. The logs will include `Captured IR frame (N timings)` when the hardware
+produces a complete frame and `IR event delivered (HTTP 200, ...)` when the
+Supervisor event endpoint accepts it. Avoid posting unredacted logs containing
+private details or access tokens. Normal operation defaults to `debug: false`.
+
+If HAIR detects the receiver entity but does not display signals:
+
+1. Check that the **Pironman IR Receiver** app is running (not just the custom
+   integration). The custom integration alone cannot read `/dev/lirc0`.
+2. With `debug: true`, press an IR remote button. If no captured frames are
+   logged, check the GPIO13 overlay, `/dev/lirc0` mapping and whether another
+   process is consuming the LIRC stream.
+3. If captured frames appear but no delivery messages follow, check for
+   Supervisor HTTP errors and confirm `homeassistant_api: true`.
+4. In Home Assistant Developer Tools > Events, listen for
+   `sunfounder_ir_received`. The `receiver_id` in the event must match the ID
+   configured in the **SunFounder IR Receiver** custom integration.
+5. If events arrive, select **SunFounder IR Receiver** in HAIR > Sniffer rather
+   than a different Pironman or ESPHome receiver.
+
+The Dockerfile uses `with-contenv` when launching Python because Home Assistant
+base images run s6-overlay and environment variables injected into the app
+(including `SUPERVISOR_TOKEN`) need to be restored for that process.
+
+### Independent local smoke test (not a substitute for HAOS hardware testing)
+
+Build with the configured `BUILD_FROM` argument and use a mock Supervisor HTTP
+endpoint to validate event requests. Successful HTTP 200 responses from a mock
+server prove request delivery only; they do **not** prove Supervisor
+permissions or native HAIR decoding on actual Home Assistant OS.

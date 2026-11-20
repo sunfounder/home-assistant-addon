@@ -14,5 +14,7 @@ devices:
   - /dev/lirc0
 options:
   receiver_id: pironman5-max
+  debug: false
 schema:
   receiver_id: str
+  debug: bool

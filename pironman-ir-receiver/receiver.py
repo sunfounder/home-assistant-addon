@@ -85,6 +85,9 @@ def send_frames(token: str, pending: queue.Queue) -> None:
             )
             with urlopen(req, timeout=4) as response:
                 response.read()
+                LOG.debug("IR event delivered (HTTP %s, receiver %s, %d timings)",
+                          response.status, payload.get("receiver_id"),
+                          len(payload.get("timings", [])))
         except (HTTPError, URLError, OSError, TimeoutError) as exc:
             LOG.warning("Unable to deliver IR frame: %s", exc)
         finally:
@@ -113,6 +116,7 @@ def listen(device: str, receiver_id: str, pending: queue.Queue) -> None:
                 buffer = buffer[WORD.size:]
                 timings = assembler.feed(value)
                 if timings:
+                    LOG.debug("Captured IR frame (%d timings)", len(timings))
                     payload = {"receiver_id": receiver_id, "timings": timings, "modulation": None}
                     try:
                         pending.put_nowait(payload)
@@ -127,6 +131,12 @@ def main() -> int:
     options_path = Path("/data/options.json")
     options = json.loads(options_path.read_text(encoding="utf-8"))
     receiver_id = str(options.get("receiver_id", "")).strip()
+    debug = options.get("debug", False)
+    if type(debug) is not bool:
+        raise SystemExit("debug option must be a boolean")
+    if debug:
+        LOG.setLevel(logging.DEBUG)
+    LOG.info("IR receiver: %s (debug=%s)", receiver_id, debug)
     if not receiver_id or len(receiver_id) > 64 or any(ch.isspace() for ch in receiver_id):
         raise SystemExit("Configure a receiver_id containing 1-64 non-space characters")
     token = os.environ.get("SUPERVISOR_TOKEN", "")
