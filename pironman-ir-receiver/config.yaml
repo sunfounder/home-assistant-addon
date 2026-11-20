@@ -1,5 +1,5 @@
 name: Pironman IR Receiver
-version: "0.1.0"
+version: "0.1.1"
 slug: pironman-ir-receiver
 description: Receive IR signals from the Pironman 5 Max for Home Assistant and HAIR
 url: https://github.com/sunfounder/home-assistant-addon
