@@ -1,0 +1,17 @@
+{
+  "title": "SunFounder IR Receiver",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to SunFounder IR bridge",
+        "description": "Enter the receiver ID configured in the SunFounder IR Receiver app.",
+        "data": {
+          "receiver_id": "Receiver ID"
+        }
+      }
+    },
+    "error": {
+      "invalid_receiver_id": "Enter 1–64 characters without spaces."
+    }
+  }
+}

@@ -1,2 +1,4 @@
 .bak
 .vscode/*
+__pycache__/
+*.pyc
