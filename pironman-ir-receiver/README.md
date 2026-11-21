@@ -1,6 +1,6 @@
 # SunFounder Pironman 5 Max: standalone IR receiver for Home Assistant OS
 
-> **Experimental / community testing — HAOS end-to-end validation pending.** This contribution is
+> **Experimental — successfully validated on Home Assistant Container and independently tested on Home Assistant OS.** This contribution is
 > an independently implemented feature for SunFounder's add-on repository. It
 > does not require `ChristophKomenda/pironman5-homeassistant-container`, its IR
 > host bridge, or its `pironman5` Home Assistant integration.
@@ -56,24 +56,21 @@ If upgrading from an earlier experimental version,
 refresh the repository and verify the installed version.
 Back up the add-on options before reinstalling if necessary.
 
-### Confirmed testing
+### Validation summary
 
-Successfully tested with real IR hardware on a
-Raspberry Pi 5 / Pironman 5 Max running Debian
-and Home Assistant Container.
+The full infrared signal path has now been successfully
+tested on both Home Assistant Container and Home Assistant OS.
 
-Verified signal path:
+- **Debian / Home Assistant Container:** Successful live
+  IR capture using real Pironman 5 Max hardware.
+- **Home Assistant OS 18.5 / Core 2026.11.2:**
+  Successful independent community test.
+- **HAIR:** Infrared codes were successfully captured.
+- **Real-world verification:** Captured IR codes were
+  successfully used to control a television.
 
-**IR remote → GPIO13 → LIRC → Docker bridge →
-Home Assistant → InfraredReceiverEntity → HAIR Sniffer**
-
-Real infrared signals appeared successfully in HAIR.
-
-### Remaining validation
-
-The complete Home Assistant OS workflow still requires
-independent testing, particularly Supervisor authentication,
-device mapping and end-to-end event delivery.
+Further testing across additional hardware variants and
+Home Assistant OS versions is welcome.
 
 ---
 
@@ -112,6 +109,61 @@ project.
 - Linux `/dev/lircN` enumeration can differ between systems; this first
   version intentionally supports `/dev/lirc0` only.
 
+## Independent Home Assistant OS Validation
+
+**Status: Successful community end-to-end test**
+
+**Date:** 21 November 2026
+
+**Tester:** [@eugenioparise](https://github.com/eugenioparise)
+
+### Environment
+
+- SunFounder Pironman 5 Max
+- Home Assistant OS 18.5
+- Home Assistant Core 2026.11.2
+- Built-in infrared receiver exposed via `/dev/lirc0`
+- Pironman IR Receiver development add-on
+- Companion `sunfounder_ir` custom integration
+- HAIR integration
+
+### Test procedure
+
+The community tester independently:
+
+1. Added the development repository to Home Assistant.
+2. Installed the standalone Pironman IR Receiver add-on.
+3. Updated the `sunfounder_ir` companion integration.
+4. Configured matching receiver IDs.
+5. Disabled the IR option in the existing Pironman integration.
+6. Disconnected the external ESP32 infrared receiver.
+7. Captured infrared codes using HAIR Sniffer.
+8. Successfully tested recorded codes on a television.
+
+### Result
+
+**The standalone infrared receiver implementation successfully
+worked on the reported Home Assistant OS installation.**
+
+This confirms the complete signal path:
+
+**IR remote → GPIO13 → LIRC → standalone add-on →
+Supervisor API → Home Assistant → native IR entity → HAIR**
+
+The captured IR codes could also be used in a real-world
+television control test.
+
+This is an independently reported successful community test,
+not a guarantee of compatibility with every HAOS version
+or Pironman hardware revision.
+
+Special thanks to @eugenioparise for suggesting this feature
+and helping validate it on real Home Assistant OS hardware.
+
+[Read the community discussion](https://github.com/ChristophKomenda/pironman5-homeassistant-container/discussions/16).
+
+---
+
 ## Development tests
 
 ```bash
@@ -132,17 +184,21 @@ and `_handle_received_signal()` returned without error. Earlier manual events
 contained empty data (`{}`), which explained their rejection; this was not
 a confirmed defect in the integration.
 
-**Important:** These tests validate Home Assistant **Container on Debian**,
-**not Home Assistant OS**. Actual HAOS Supervisor proxy authentication, device
-mapping, and complete HAOS-to-HAIR behavior still require confirmation by an
-HAOS tester.
+The Debian-based Home Assistant Container tests were performed
+locally. A separate community test has since successfully
+validated the complete infrared-to-HAIR path on Home Assistant OS.
 
 ## Known limitations
 
-Local Docker, real IR hardware, Home Assistant Container, and HAIR Sniffer have
-now been tested successfully. HAOS Supervisor authentication, mapping, and
-end-to-end HAIR functionality still require independent HAOS testing.
-This contribution is open for review and community testing. Full Home Assistant OS end-to-end validation is still pending before final merge consideration.
+Home Assistant Container and Home Assistant OS have both been
+successfully tested using real Pironman 5 Max hardware.
+
+The Home Assistant OS test was independently performed by a
+community member. Additional OS versions, hardware revisions,
+and long-term reliability remain to be validated.
+
+The contribution is open for SunFounder review and remains
+experimental until an official release.
 
 
 ## Diagnostics: optional debug logging
@@ -178,3 +234,14 @@ Build with the configured `BUILD_FROM` argument and use a mock Supervisor HTTP
 endpoint to validate event requests. Successful HTTP 200 responses from a mock
 server prove request delivery only; they do **not** prove Supervisor
 permissions or native HAIR decoding on actual Home Assistant OS.
+
+## Project status and links
+
+- [Official SunFounder PR #26](https://github.com/sunfounder/home-assistant-addon/pull/26)
+- [Development repository](https://github.com/ChristophKomenda/home-assistant-addon)
+- [Community testing discussion](https://github.com/ChristophKomenda/pironman5-homeassistant-container/discussions/16)
+- [HAIR](https://github.com/Anirudh-G/HAIR)
+
+**Status:** Successfully tested on Home Assistant Container
+and independently validated on Home Assistant OS.
+Official SunFounder review and release are still pending.
