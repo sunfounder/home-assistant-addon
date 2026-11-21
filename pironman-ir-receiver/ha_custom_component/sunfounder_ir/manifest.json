@@ -1,7 +1,7 @@
 {
   "domain": "sunfounder_ir",
   "name": "SunFounder IR Receiver",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "documentation": "https://github.com/sunfounder/home-assistant-addon",
   "config_flow": true,
   "integration_type": "hub",
