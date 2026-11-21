@@ -1,6 +1,6 @@
 # SunFounder Pironman 5 Max: standalone IR receiver for Home Assistant OS
 
-> **Draft / experimental — not yet HAOS hardware-tested.** This contribution is
+> **Experimental / community testing — HAOS end-to-end validation pending.** This contribution is
 > an independently implemented feature for SunFounder's add-on repository. It
 > does not require `ChristophKomenda/pironman5-homeassistant-container`, its IR
 > host bridge, or its `pironman5` Home Assistant integration.
@@ -21,6 +21,61 @@ This is **receive-only**. It does not turn the IR receiver into a transmitter.
   available on the host. Exact HAOS boot-overlay procedure must be verified for
   the user's installation; do not change boot partitions blindly.
 - HAIR installed if learning remotes is desired.
+
+## Testing the development version (v0.1.1)
+
+The experimental Pironman IR Receiver add-on is available
+for community testing before the official SunFounder release.
+
+### Installation
+
+1. Open the Home Assistant Add-on Store.
+2. Add this repository:
+
+   `https://github.com/ChristophKomenda/home-assistant-addon`
+
+3. Refresh the repository.
+4. Install **Pironman IR Receiver v0.1.1**.
+5. Configure the add-on:
+
+   ```yaml
+   receiver_id: pironman5-max
+   debug: true
+   ```
+
+6. Start the add-on and check its logs.
+7. Copy the companion integration from
+   `pironman-ir-receiver/ha_custom_component/sunfounder_ir/`
+   into `/config/custom_components/sunfounder_ir/`.
+8. Restart Home Assistant and configure the integration
+   with the same `receiver_id`.
+9. Open **HAIR > Sniffer** and select
+   **SunFounder IR Receiver**.
+
+If upgrading from an earlier experimental version,
+refresh the repository and verify the installed version.
+Back up the add-on options before reinstalling if necessary.
+
+### Confirmed testing
+
+Successfully tested with real IR hardware on a
+Raspberry Pi 5 / Pironman 5 Max running Debian
+and Home Assistant Container.
+
+Verified signal path:
+
+**IR remote → GPIO13 → LIRC → Docker bridge →
+Home Assistant → InfraredReceiverEntity → HAIR Sniffer**
+
+Real infrared signals appeared successfully in HAIR.
+
+### Remaining validation
+
+The complete Home Assistant OS workflow still requires
+independent testing, particularly Supervisor authentication,
+device mapping and end-to-end event delivery.
+
+---
 
 ## Install (once the PR is merged into the SunFounder add-on repository)
 
@@ -87,7 +142,7 @@ HAOS tester.
 Local Docker, real IR hardware, Home Assistant Container, and HAIR Sniffer have
 now been tested successfully. HAOS Supervisor authentication, mapping, and
 end-to-end HAIR functionality still require independent HAOS testing.
-Please keep this PR as a **draft** until that validation succeeds.
+This contribution is open for review and community testing. Full Home Assistant OS end-to-end validation is still pending before final merge consideration.
 
 
 ## Diagnostics: optional debug logging
