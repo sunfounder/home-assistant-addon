@@ -111,7 +111,7 @@ You can change the configuration in the Configuration tab. Navigate to Configura
 
 Maintained by the community, not by SunFounder. Please report issues to the repositories below.
 
-- **Pironman 5 Max - IR receiver for Home Assistant OS** - exposes the built-in IR receiver (`GPIO13`) to Home Assistant as a `sunfounder_ir_received` event, with an `InfraredReceiverEntity` for HAIR. Tested on Home Assistant Container and HAOS by the author and an independent tester. By [@ChristophKomenda](https://github.com/ChristophKomenda): https://github.com/ChristophKomenda/home-assistant-addon
+- **Pironman 5 Max - IR receiver for Home Assistant OS** - community-maintained add-on for the built-in IR receiver (`GPIO13`), with HAIR support. Works with the Pironman 5 HACS integration (recommended, no separate custom integration required) or the legacy standalone mode. Independently tested on HAOS. By [@ChristophKomenda](https://github.com/ChristophKomenda): https://github.com/ChristophKomenda/home-assistant-addon
 
 ## Development
 
